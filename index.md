@@ -4,7 +4,7 @@ title: I'm [Your Full Name]
 hide: true
 ---
 
-Hi! My name is John Mortensen
+Hi! My name is Shayan Bhatti
 
 ### Development Environment
 
