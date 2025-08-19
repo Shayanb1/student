@@ -42,6 +42,14 @@ Hi! My name is 🧌 Shayan Bhatti
             Turtle
         </div>
     </a>
+    <a href="{{site.baseurl}}/newbutton" style="text-decoration: none;">
+        <div style="background-color: #FFC0CB; color: Black; padding: 10px 20px; border-radius: 5px; font-weight: bold;">
+            Cool Button
+        </div>
+    </a>
+    <button class="btn" onclick="alert('KABOOOM');">bomb</button>
+
+
 </div>
 
 <br>
