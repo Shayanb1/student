@@ -5,9 +5,14 @@ permalink: /about/
 comments: true
 ---
 
-## As a conversation Starter
+## Hi!! My name is Shayan, i'm 15 years old
+
 
 Here are some places I have lived.
+
+- California, moved here at around 6 years old and I have loved living here
+
+- Texas, born in Dallas, I lived here for about 4 years and I don't remember much about it.
 
 
 <!-- This grid_container class is used by CSS styling and the id is used by JavaScript connection -->
@@ -23,9 +28,6 @@ Here are some places I have lived.
     var http_source = "https://upload.wikimedia.org/wikipedia/commons/";
     var living_in_the_world = [
         {"flag": "0/01/Flag_of_California.svg", "greeting": "Hey", "description": "California - forever"},
-        {"flag": "b/b9/Flag_of_Oregon.svg", "greeting": "Hi", "description": "Oregon - 9 years"},
-        {"flag": "b/be/Flag_of_England.svg", "greeting": "Alright mate", "description": "England - 2 years"},
-        {"flag": "e/ef/Flag_of_Hawaii.svg", "greeting": "Aloha", "description": "Hawaii - 2 years"},
     ];
 
     // 3a. Consider how to update style count for size of container

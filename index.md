@@ -1,6 +1,6 @@
 ---
 layout: base
-title: I'm [Your Full Name]
+title: I'm Shayan
 hide: true
 ---
 
@@ -20,6 +20,14 @@ hide: true
 <a href="https://vscode.dev/" class="button small" style="background-color: #d38a4bff">
     <span style="color: #FFFFFF">VSCODE</span>
 </a>
+
+<a href="https://vscode.dev/" class="button small" style="background-color: #d38a4bff">
+    <span style="color: #FFFFFF">VSCODE</span>
+</a>
+
+<input type="button" value="Yea or nay?">
+
+<button>cool button</button>
 
 <br>
 
