@@ -27,7 +27,7 @@ Here are some places I have lived.
     // 2. Define a JavaScript object for our http source and our data rows for the Living in the World grid
     var http_source = "https://upload.wikimedia.org/wikipedia/commons/";
     var living_in_the_world = [
-        {"flag": "0/01/Flag_of_California.svg", "greeting": "Hey", "description": "California - forever"},
+        {"flag": "0/01/Flag_of_California.svg", "greeting": "I love SoCal!", "description": "California on top!!"},
     ];
 
     // 3a. Consider how to update style count for size of container
@@ -63,40 +63,32 @@ Here are some places I have lived.
 
 ### Journey through Life
 
-Here is what I did at those places
+Here is what I have done in San Diego
 
-- 🏫 Lots of Elementary Schools in Tucson, LA, Honolulu, and Glendale (CA)
-- 🏫 Middle and High School in Glendale (CA), Hoover High graduated '77
-- 🎓 Glendale CA Community College, UCLA Extension, LA Wilshire Computer Tech School '77 to '79
-- ⛪ England, London Missionary for Church of Jesus Christ of Latter-day Saints '79 to '81
-- 💼 Culver City, Glendale CA founder at Ashton-Tate, original PC's dBase 2 and 3 '82 to '87
-- 🎓 Eugene Oregon Undergraduate CompSci Degree at University of Oregon (Go Ducks!) '89 to '91
-- 💼 Eugene Oregon, founder and owner @ Microniche `88, Point Control CAD CAM developer '91 to '96
-- 🏢 San Diego CA Qualcomm, Satellite Comm and 1st Mobile OS (BREW) '96 to '19
-- 👨‍🏫 San Diego CA Teacher of Computer Science @ Del Norte High School San Diego '19 to present
+-  Visit many different beaches
+-  Graduate from elementary and middle school
+-  Went to Padres games
+-  Went to amusment parks
+-  Took speech and math classes outside of school
+-  Played football for 5 years
 
 ### Culture, Family, and Fun
 
-Everything for me, as for many others, revolves around family and faith.
+Things I love and appreciate most are God, Family, and Friends, in that order.
 
-- My mother told me that I was Danish, English. and Irish, here is my researched [family tree]({{site.baseurl}}/images/about/familytree.png)
-- My family is pretty big as I have been married twice, my 1st wife passed away.  We have had 5 kids, 4 adopted by me, 1 biological.  Plus, there are three grandkids.  My name to my grandkids is Abuilito.
-- The gallery of pics has some of my family, fun, culture and faith memories.
+- I have been a muslim my whole life and really like my religion because it is very peacful and it makes me a better person to others
+- I am Pakistani, never really lived there for more than a year, but I still love that country
+- For fun I like to go to the park and play basketball or go to a sports park and play football with my friends
+- My favorite things to do are: Spend time with family/friends, play sports, study without being forced to, and sleep
 
 <comment>
-Gallery of Pics, scroll to the right for more ...
+Here are some pics of my family, friends, and things I do for fun!
 </comment>
 <div class="image-gallery">
-  <img src="{{site.baseurl}}/images/about/missionary.jpg" alt="Image 1">
-  <img src="{{site.baseurl}}/images/about/john_tamara.jpg" alt="Image 2">
-  <img src="{{site.baseurl}}/images/about/tamara_fam.jpg" alt="Image 3">
-  <img src="{{site.baseurl}}/images/about/surf.jpg" alt="Image 4">
-  <img src="{{site.baseurl}}/images/about/john_lora.jpg" alt="Image 5">
-  <img src="{{site.baseurl}}/images/about/lora_fam.jpg" alt="Image 6">
-  <img src="{{site.baseurl}}/images/about/lora_fam2.jpg" alt="Image 7">
-  <img src="{{site.baseurl}}/images/about/pj_party.jpg" alt="Image 8">
-  <img src="{{site.baseurl}}/images/about/trent_family.png" alt="Image 9">
-  <img src="{{site.baseurl}}/images/about/claire.jpg" alt="Image 10">
-  <img src="{{site.baseurl}}/images/about/grandkids.jpg" alt="Image 11">
-  <img src="{{site.baseurl}}/images/about/farm.jpg" alt="Image 12">
+  <img src="{{site.baseurl}}/images/about/fam.png" alt="Image 1">
+  <img src="{{site.baseurl}}/images/about/meccafam.png" alt="Image 2">
+  <img src="{{site.baseurl}}/images/about/fg.png" alt="Image 3">
+  <img src="{{site.baseurl}}/images/about/meandbilly.png" alt="Image 4">
+  <img src="{{site.baseurl}}/images/about/coolview.png" alt="Image 5">
+  
 </div>
