@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Snake Game
-permalink: /snake
+permalink: /snakes
 ---
 <style>
 body {
@@ -10,7 +10,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-image: url('images/snakegamebg.png');
+    background-image: url('images/snakesbackg.png');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -48,6 +48,7 @@ h1 {
     border: 3px solid #34495e;
     background-color: #1a1a1a;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    transform: translateX(-400px);
 }
 
 .controls {
