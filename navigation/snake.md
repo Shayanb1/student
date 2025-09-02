@@ -48,7 +48,7 @@ h1 {
     border: 3px solid #34495e;
     background-color: #1a1a1a;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    transform: translateX(-400px);
+    transform: translateX(-160px);
 }
 
 .controls {
@@ -111,7 +111,7 @@ h1 {
     <div class="score">Score: <span id="score">0</span></div>
     <div class="high-score">High Score: <span id="highScore">0</span></div>
 </div>
-<canvas id="gameCanvas" width="1800" height="768"></canvas>
+<canvas id="gameCanvas" width="1300" height="538"></canvas>
 <div class="controls">
     Use WASD or Arrow Keys to control the snake<br>
     Press SPACE to pause/resume
