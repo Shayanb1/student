@@ -9,7 +9,7 @@ body {
     padding: 20px;
     font-family: 'Arial', sans-serif;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     min-height: 100vh;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -23,6 +23,10 @@ body {
     border-radius: 20px;
     backdrop-filter: blur(10px);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    margin-left: -180px;
+    transform: translateX(-180px);
+    max-width: 400px;
+    width: fit-content;
 }
 
 h1 {
