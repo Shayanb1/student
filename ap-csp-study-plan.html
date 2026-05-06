@@ -1,0 +1,1198 @@
+---
+layout: bootstrap
+title: AP CSP Study Plan
+search_exclude: true
+description: Day-by-day AP CSP exam study plan with topic priorities and Knowt sessions
+hide: true
+permalink: /ap-csp-study-plan
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AP CSP Study Plan — May 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0b0d12;
+      --surface:   #13161f;
+      --border:    #1e2333;
+      --text:      #e2e8f0;
+      --muted:     #64748b;
+      --accent:    #6366f1;
+
+      /* day palette */
+      --red:    #ef4444;
+      --orange: #f97316;
+      --amber:  #f59e0b;
+      --teal:   #14b8a6;
+      --blue:   #3b82f6;
+      --purple: #a855f7;
+      --green:  #22c55e;
+      --slate:  #94a3b8;
+      --gold:   #fbbf24;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #0f0c29, #1a0533, #0b0d12);
+      border-bottom: 1px solid var(--border);
+      padding: 3.5rem 2rem 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(99,102,241,.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      background: rgba(239,68,68,.15);
+      border: 1px solid rgba(239,68,68,.4);
+      color: #fca5a5;
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: .3rem .8rem;
+      border-radius: 999px;
+      margin-bottom: 1.2rem;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: -.02em;
+      background: linear-gradient(135deg, #fff 30%, #a5b4fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: .6rem;
+    }
+    .hero p {
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 560px;
+      margin: 0 auto 2rem;
+    }
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+    }
+    .stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .stat-num {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: .72rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--muted);
+      margin-top: .2rem;
+    }
+
+    /* ── COUNTDOWN ── */
+    #countdown-bar {
+      background: rgba(239,68,68,.1);
+      border-bottom: 1px solid rgba(239,68,68,.25);
+      padding: .65rem 2rem;
+      text-align: center;
+      font-size: .88rem;
+      color: #fca5a5;
+      font-weight: 500;
+    }
+    #countdown-bar span { font-weight: 700; color: #fff; }
+
+    /* ── WRAPPER ── */
+    .wrapper {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 2rem;
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      .wrapper { grid-template-columns: 1fr; }
+    }
+
+    /* ── SECTION HEADINGS ── */
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -.01em;
+      color: #fff;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+      margin-left: .5rem;
+    }
+
+    /* ── CALENDAR ── */
+    .calendar { display: flex; flex-direction: column; gap: 1rem; }
+
+    .day-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      transition: transform .2s, box-shadow .2s;
+      position: relative;
+    }
+    .day-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0,0,0,.4);
+    }
+    .day-card.past { opacity: .55; }
+    .day-card.today {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent), 0 4px 24px rgba(99,102,241,.2);
+    }
+    .day-card.exam-day {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 1px var(--gold), 0 4px 32px rgba(251,191,36,.25);
+    }
+
+    .day-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: .9rem 1.2rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .day-num {
+      width: 46px; height: 46px;
+      border-radius: 10px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      font-weight: 800;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .day-num small {
+      font-size: .55rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      opacity: .8;
+    }
+    .day-meta { flex: 1; }
+    .day-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .day-theme {
+      font-size: .78rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+    .day-badge {
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: .25rem .65rem;
+      border-radius: 999px;
+    }
+
+    .day-body { padding: .9rem 1.2rem; }
+
+    /* blocks */
+    .blocks { display: flex; flex-direction: column; gap: .5rem; }
+    .block {
+      display: flex;
+      gap: .75rem;
+      align-items: flex-start;
+      padding: .55rem .8rem;
+      border-radius: 8px;
+      background: rgba(255,255,255,.03);
+      border-left: 3px solid transparent;
+    }
+    .block-time {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .7rem;
+      color: var(--muted);
+      white-space: nowrap;
+      padding-top: .1rem;
+      min-width: 82px;
+    }
+    .block-icon { font-size: 1rem; flex-shrink: 0; margin-top: .05rem; }
+    .block-content { flex: 1; }
+    .block-title {
+      font-size: .875rem;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .block-sub {
+      font-size: .75rem;
+      color: var(--muted);
+      margin-top: .1rem;
+    }
+
+    /* knowt block */
+    .block.knowt {
+      background: rgba(34,197,94,.06);
+      border-left-color: #22c55e;
+    }
+    .knowt-term {
+      display: inline-flex;
+      align-items: center;
+      gap: .3rem;
+      background: rgba(34,197,94,.12);
+      border: 1px solid rgba(34,197,94,.25);
+      color: #86efac;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .68rem;
+      padding: .15rem .45rem;
+      border-radius: 5px;
+      margin-top: .3rem;
+    }
+    .knowt-link {
+      display: inline-flex;
+      align-items: center;
+      gap: .3rem;
+      color: #86efac;
+      font-size: .72rem;
+      font-weight: 600;
+      text-decoration: none;
+      margin-left: auto;
+      white-space: nowrap;
+      margin-top: .35rem;
+    }
+    .knowt-link:hover { text-decoration: underline; }
+
+    /* color accents per day */
+    .c-red    .day-num { background: rgba(239,68,68,.15);  color: #fca5a5; }
+    .c-orange .day-num { background: rgba(249,115,22,.15); color: #fdba74; }
+    .c-amber  .day-num { background: rgba(245,158,11,.15); color: #fcd34d; }
+    .c-teal   .day-num { background: rgba(20,184,166,.15); color: #5eead4; }
+    .c-blue   .day-num { background: rgba(59,130,246,.15); color: #93c5fd; }
+    .c-purple .day-num { background: rgba(168,85,247,.15); color: #d8b4fe; }
+    .c-green  .day-num { background: rgba(34,197,94,.15);  color: #86efac; }
+    .c-slate  .day-num { background: rgba(148,163,184,.1); color: #cbd5e1; }
+    .c-gold   .day-num { background: rgba(251,191,36,.18); color: #fde68a; }
+
+    .c-red    .block.quiz { border-left-color: var(--red); }
+    .c-orange .block.quiz { border-left-color: var(--orange); }
+    .c-amber  .block.quiz { border-left-color: var(--amber); }
+    .c-teal   .block.quiz { border-left-color: var(--teal); }
+    .c-blue   .block.quiz { border-left-color: var(--blue); }
+    .c-purple .block.quiz { border-left-color: var(--purple); }
+    .c-green  .block.quiz { border-left-color: var(--green); }
+    .c-slate  .block.quiz { border-left-color: var(--slate); }
+
+    .c-red    .day-badge { background: rgba(239,68,68,.15);  color: #fca5a5; }
+    .c-orange .day-badge { background: rgba(249,115,22,.15); color: #fdba74; }
+    .c-amber  .day-badge { background: rgba(245,158,11,.15); color: #fcd34d; }
+    .c-teal   .day-badge { background: rgba(20,184,166,.15); color: #5eead4; }
+    .c-blue   .day-badge { background: rgba(59,130,246,.15); color: #93c5fd; }
+    .c-purple .day-badge { background: rgba(168,85,247,.15); color: #d8b4fe; }
+    .c-green  .day-badge { background: rgba(34,197,94,.15);  color: #86efac; }
+    .c-slate  .day-badge { background: rgba(148,163,184,.1); color: #cbd5e1; }
+    .c-gold   .day-badge { background: rgba(251,191,36,.18); color: #fde68a; }
+
+    .today-tag {
+      background: var(--accent);
+      color: #fff;
+      font-size: .68rem;
+      font-weight: 700;
+      padding: .2rem .6rem;
+      border-radius: 999px;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+
+    /* priority list */
+    .priority-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .priority-header {
+      padding: 1rem 1.2rem .75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .priority-header h2 {
+      font-size: .95rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: .45rem;
+    }
+    .priority-header p {
+      font-size: .75rem;
+      color: var(--muted);
+      margin-top: .2rem;
+    }
+
+    .priority-list { list-style: none; }
+    .priority-item {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: .65rem 1.2rem;
+      border-bottom: 1px solid rgba(255,255,255,.04);
+      transition: background .15s;
+    }
+    .priority-item:last-child { border-bottom: none; }
+    .priority-item:hover { background: rgba(255,255,255,.03); }
+
+    .p-rank {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      font-size: .68rem;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .p-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .p-name {
+      flex: 1;
+      font-size: .8rem;
+      color: var(--text);
+      line-height: 1.35;
+    }
+    .p-badge {
+      font-size: .62rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      padding: .15rem .5rem;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .p-critical .p-rank { background: rgba(239,68,68,.2); color: #fca5a5; }
+    .p-critical .p-dot  { background: var(--red); }
+    .p-critical .p-badge { background: rgba(239,68,68,.15); color: #fca5a5; }
+
+    .p-high .p-rank  { background: rgba(249,115,22,.2); color: #fdba74; }
+    .p-high .p-dot   { background: var(--orange); }
+    .p-high .p-badge { background: rgba(249,115,22,.15); color: #fdba74; }
+
+    .p-med .p-rank   { background: rgba(245,158,11,.2); color: #fcd34d; }
+    .p-med .p-dot    { background: var(--amber); }
+    .p-med .p-badge  { background: rgba(245,158,11,.15); color: #fcd34d; }
+
+    .p-low .p-rank   { background: rgba(34,197,94,.15); color: #86efac; }
+    .p-low .p-dot    { background: var(--green); }
+    .p-low .p-badge  { background: rgba(34,197,94,.1); color: #86efac; }
+
+    /* in-progress pulse */
+    .in-progress-item .p-name { color: #fff; font-weight: 600; }
+    .pulse-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--red);
+      flex-shrink: 0;
+      box-shadow: 0 0 0 0 rgba(239,68,68,.5);
+      animation: pulse 1.6s infinite;
+    }
+    @keyframes pulse {
+      0%   { box-shadow: 0 0 0 0 rgba(239,68,68,.5); }
+      70%  { box-shadow: 0 0 0 8px rgba(239,68,68,0); }
+      100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); }
+    }
+
+    /* knowt quick-ref */
+    .knowt-card {
+      background: var(--surface);
+      border: 1px solid rgba(34,197,94,.2);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .knowt-card-header {
+      padding: .9rem 1.2rem .7rem;
+      border-bottom: 1px solid rgba(34,197,94,.15);
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .knowt-card-header h2 {
+      font-size: .95rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .knowt-card-header span {
+      font-size: .72rem;
+      color: #86efac;
+      font-weight: 500;
+    }
+    .knowt-ref-list { list-style: none; }
+    .knowt-ref-item {
+      padding: .55rem 1.2rem;
+      border-bottom: 1px solid rgba(255,255,255,.04);
+      font-size: .77rem;
+    }
+    .knowt-ref-item:last-child { border-bottom: none; }
+    .knowt-ref-topic { color: var(--muted); font-weight: 500; margin-bottom: .15rem; }
+    .knowt-ref-term {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .68rem;
+      color: #86efac;
+      background: rgba(34,197,94,.08);
+      padding: .1rem .4rem;
+      border-radius: 4px;
+    }
+
+    /* legend */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      margin-bottom: 1.2rem;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: .35rem;
+      font-size: .73rem;
+      color: var(--muted);
+    }
+    .legend-dot {
+      width: 9px; height: 9px;
+      border-radius: 50%;
+    }
+
+    /* exam day card */
+    .exam-day-card {
+      background: linear-gradient(135deg, rgba(251,191,36,.12), rgba(251,191,36,.04));
+      border: 1px solid rgba(251,191,36,.35);
+      border-radius: 14px;
+      padding: 1.5rem 1.2rem;
+      text-align: center;
+    }
+    .exam-day-card h3 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #fde68a;
+      margin-bottom: .3rem;
+    }
+    .exam-day-card p { color: var(--muted); font-size: .88rem; }
+    .exam-day-card .exam-emoji { font-size: 2.8rem; margin-bottom: .6rem; }
+
+    /* tips box */
+    .tips-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.1rem 1.2rem;
+    }
+    .tips-card h3 {
+      font-size: .88rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: .7rem;
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+    }
+    .tips-list { list-style: none; }
+    .tips-list li {
+      font-size: .78rem;
+      color: var(--muted);
+      padding: .3rem 0;
+      padding-left: 1rem;
+      position: relative;
+      border-bottom: 1px solid rgba(255,255,255,.04);
+    }
+    .tips-list li:last-child { border-bottom: none; }
+    .tips-list li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── COUNTDOWN BAR ── -->
+<div id="countdown-bar">
+  ⏳ AP CSP Exam countdown: <span id="countdown-text">calculating…</span>
+</div>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-badge">📚 AP Computer Science Principles</div>
+  <h1>9-Day Study Plan</h1>
+  <p>May 5 – 13 · 2 hours/day · Exam on May 14, 2026</p>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-num">9</span><span class="stat-label">Study Days</span></div>
+    <div class="stat"><span class="stat-num">18</span><span class="stat-label">Total Hours</span></div>
+    <div class="stat"><span class="stat-num">13</span><span class="stat-label">Quizzes Left</span></div>
+    <div class="stat"><span class="stat-num">knowt</span><span class="stat-label">Sessions</span></div>
+  </div>
+</div>
+
+<!-- ── MAIN LAYOUT ── -->
+<div class="wrapper">
+
+  <!-- LEFT: CALENDAR -->
+  <div>
+    <div class="section-title">📅 Day-by-Day Schedule</div>
+
+    <!-- LEGEND -->
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div> Critical Priority</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div> Algorithms</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div> Errors &amp; Data Structures</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div> Core Programming</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--purple)"></div> Data &amp; Modeling</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--teal)"></div> Internet &amp; Random</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div> Full Review</div>
+    </div>
+
+    <div class="calendar">
+
+      <!-- ── MAY 5 ── PAST -->
+      <div class="day-card past c-red">
+        <div class="day-header">
+          <div class="day-num">5<small>MAY</small></div>
+          <div class="day-meta">
+            <div class="day-name">Monday — Day 1</div>
+            <div class="day-theme">🔴 First Priority: Complete the In-Progress MCQ Exam</div>
+          </div>
+          <span class="day-badge">Past</span>
+        </div>
+        <div class="day-body">
+          <div class="blocks">
+            <div class="block quiz">
+              <div class="block-time">0:00 – 1:15</div>
+              <div class="block-icon">📝</div>
+              <div class="block-content">
+                <div class="block-title">Supplemental Practice Exam MCQ <span style="color:#fca5a5;font-size:.7rem;font-weight:700;margin-left:.4rem;">IN PROGRESS</span></div>
+                <div class="block-sub">Finish all unanswered questions. Review every wrong answer with full explanation.</div>
+              </div>
+            </div>
+            <div class="block quiz">
+              <div class="block-time">1:15 – 1:45</div>
+              <div class="block-icon">📊</div>
+              <div class="block-content">
+                <div class="block-title">Error Review &amp; Notes</div>
+                <div class="block-sub">Log every missed topic — these become your weak-area watchlist for later days.</div>
+              </div>
+            </div>
+            <div class="block knowt">
+              <div class="block-time">1:45 – 2:00</div>
+              <div class="block-icon">🟢</div>
+              <div class="block-content">
+                <div class="block-title">Knowt Session</div>
+                <div class="block-sub">Search flashcard sets and practice tests:</div>
+                <div class="knowt-term">🔍 "AP CSP practice MCQ 2025 2026"</div>
+                <a class="knowt-link" href="https://knowt.com" target="_blank" rel="noopener">Open Knowt ↗</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── MAY 6 ── TODAY -->
+      <div class="day-card today c-orange">
+        <div class="day-header">
+          <div class="day-num">6<small>MAY</small></div>
+          <div class="day-meta">
+            <div class="day-name">Tuesday — Day 2 &nbsp;<span class="today-tag">TODAY</span></div>
+            <div class="day-theme">🟠 Written Response &amp; Free Response Strategies</div>
+          </div>
+          <span class="day-badge">Active</span>
+        </div>
+        <div class="day-body">
+          <div class="blocks">
+            <div class="block quiz">
+              <div class="block-time">0:00 – 1:00</div>
+              <div class="block-icon">✍️</div>
+              <div class="block-content">
+                <div class="block-title">Written Response Supplemental Practice Exam</div>
+                <div class="block-sub">Write full responses for both prompts (program function + algorithm explanation). Time yourself — aim for ~30 min per prompt.</div>
+              </div>
+            </div>
+            <div class="block quiz">
+              <div class="block-time">1:00 – 1:30</div>
+              <div class="block-icon">🧠</div>
+              <div class="block-content">
+                <div class="block-title">Self-Score &amp; Revise</div>
+                <div class="block-sub">Use the AP scoring rubric. Rewrite weak responses. Focus on: purpose, function of code, how algorithm works.</div>
+              </div>
+            </div>
+            <div class="block knowt">
+              <div class="block-time">1:30 – 2:00</div>
+              <div class="block-icon">🟢</div>
+              <div class="block-content">
+                <div class="block-title">Knowt Session</div>
+                <div class="block-sub">Search for:</div>
+                <div class="knowt-term">🔍 "AP CSP written response create performance task"</div>
+                <div class="knowt-term">🔍 "AP CSP abstractions algorithms FRQ"</div>
+                <a class="knowt-link" href="https://knowt.com" target="_blank" rel="noopener">Open Knowt ↗</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── MAY 7 ── -->
+      <div class="day-card c-orange">
+        <div class="day-header">
+          <div class="day-num">7<small>MAY</small></div>
+          <div class="day-meta">
+            <div class="day-name">Wednesday — Day 3</div>
+            <div class="day-theme">🟠 Algorithms: Efficiency + Undecidable Problems</div>
+          </div>
+          <span class="day-badge">Algorithms</span>
+        </div>
+        <div class="day-body">
+          <div class="blocks">
+            <div class="block quiz">
+              <div class="block-time">0:00 – 0:50</div>
+              <div class="block-icon">⚡</div>
+              <div class="block-content">
+                <div class="block-title">Algorithmic Efficiency Quiz</div>
+                <div class="block-sub">Key concepts: polynomial vs. exponential runtime, heuristics, reasonable vs. unreasonable time. Review Big-O intuition.</div>
+              </div>
+            </div>
+            <div class="block quiz">
+              <div class="block-time">0:50 – 1:30</div>
+              <div class="block-icon">♾️</div>
+              <div class="block-content">
+                <div class="block-title">Undecidable Problems Quiz</div>
+                <div class="block-sub">Key concepts: Halting Problem, undecidable vs. unsolvable, limits of computation. Draw diagrams of decision loops.</div>
+              </div>
+            </div>
+            <div class="block knowt">
+              <div class="block-time">1:30 – 2:00</div>
+              <div class="block-icon">🟢</div>
+              <div class="block-content">
+                <div class="block-title">Knowt Session</div>
+                <div class="block-sub">Search for:</div>
+                <div class="knowt-term">🔍 "AP CSP algorithmic efficiency heuristics"</div>
+                <div class="knowt-term">🔍 "AP CSP undecidable halting problem"</div>
+                <a class="knowt-link" href="https://knowt.com" target="_blank" rel="noopener">Open Knowt ↗</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── MAY 8 ── -->
+      <div class="day-card c-amber">
+        <div class="day-header">
+          <div class="day-num">8<small>MAY</small></div>
+          <div class="day-meta">
+            <div class="day-name">Thursday — Day 4</div>
+            <div class="day-theme">🟡 Debugging &amp; Data Structures: Errors + Lists</div>
+          </div>
+          <span class="day-badge">Errors · Lists</span>
+        </div>
+        <div class="day-body">
+          <div class="blocks">
+            <div class="block quiz">
+              <div class="block-time">0:00 – 0:50</div>
+              <div class="block-icon">🐛</div>
+              <div class="block-content">
+                <div class="block-title">Identifying and Correcting Errors Quiz</div>
+                <div class="block-sub">Key concepts: syntax vs. logic vs. runtime vs. overflow errors. Trace through code step-by-step to find bugs.</div>
+              </div>
+            </div>
+            <div class="block quiz">
+              <div class="block-time">0:50 – 1:30</div>
+              <div class="block-icon">📋</div>
+              <div class="block-content">
+                <div class="block-title">Lists Quiz (MCQs)</div>
+                <div class="block-sub">Key concepts: list indexing (1-based in AP CSP), append, remove, traversal, length. Practice list manipulation traces.</div>
+              </div>
+            </div>
+            <div class="block knowt">
+              <div class="block-time">1:30 – 2:00</div>
+              <div class="block-icon">🟢</div>
+              <div class="block-content">
+                <div class="block-title">Knowt Session</div>
+                <div class="block-sub">Search for:</div>
+                <div class="knowt-term">🔍 "AP CSP debugging errors types"</div>
+                <div class="knowt-term">🔍 "AP CSP lists arrays traversal index"</div>
+                <a class="knowt-link" href="https://knowt.com" target="_blank" rel="noopener">Open Knowt ↗</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── MAY 9 ── -->
+      <div class="day-card c-blue">
+        <div class="day-header">
+          <div class="day-num">9<small>MAY</small></div>
+          <div class="day-meta">
+            <div class="day-name">Friday — Day 5</div>
+            <div class="day-theme">🔵 Core Programming: Iteration + Calling Procedures</div>
+          </div>
+          <span class="day-badge">Programming</span>
+        </div>
+        <div class="day-body">
+          <div class="blocks">
+            <div class="block quiz">
+              <div class="block-time">0:00 – 0:50</div>
+              <div class="block-icon">🔁</div>
+              <div class="block-content">
+                <div class="block-title">Iteration Quiz (MCQs)</div>
+                <div class="block-sub">Key concepts: REPEAT n TIMES, REPEAT UNTIL, FOR EACH in list. Trace loop execution and predict final variable values.</div>
+              </div>
+            </div>
+            <div class="block quiz">
+              <div class="block-time">0:50 – 1:30</div>
+              <div class="block-icon">📞</div>
+              <div class="block-content">
+                <div class="block-title">Calling Procedures Quiz</div>
+                <div class="block-sub">Key concepts: parameters, return values, procedural abstraction, nested calls. Trace procedure calls and return values manually.</div>
+              </div>
+            </div>
+            <div class="block knowt">
+              <div class="block-time">1:30 – 2:00</div>
+              <div class="block-icon">🟢</div>
+              <div class="block-content">
+                <div class="block-title">Knowt Session</div>
+                <div class="block-sub">Search for:</div>
+                <div class="knowt-term">🔍 "AP CSP iteration loops repeat until"</div>
+                <div class="knowt-term">🔍 "AP CSP procedures parameters abstraction"</div>
+                <a class="knowt-link" href="https://knowt.com" target="_blank" rel="noopener">Open Knowt ↗</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── MAY 10 ── -->
+      <div class="day-card c-purple">
+        <div class="day-header">
+          <div class="day-num">10<small>MAY</small></div>
+          <div class="day-meta">
+            <div class="day-name">Saturday — Day 6</div>
+            <div class="day-theme">🟣 Data &amp; Modeling: Simulations + Programs with Data</div>
+          </div>
+          <span class="day-badge">Data · Models</span>
+        </div>
+        <div class="day-body">
+          <div class="blocks">
+            <div class="block quiz">
+              <div class="block-time">0:00 – 0:50</div>
+              <div class="block-icon">🎲</div>
+              <div class="block-content">
+                <div class="block-title">Simulations Quiz</div>
+                <div class="block-sub">Key concepts: purpose of simulations, random number generators, simplifications/assumptions, comparing results to real-world data.</div>
+              </div>
+            </div>
+            <div class="block quiz">
+              <div class="block-time">0:50 – 1:30</div>
+              <div class="block-icon">📈</div>
+              <div class="block-content">
+                <div class="block-title">Using Programs with Data Quiz</div>
+                <div class="block-sub">Key concepts: metadata, data compression, filtering/cleaning data, extracting information from datasets, visualization.</div>
+              </div>
+            </div>
+            <div class="block knowt">
+              <div class="block-time">1:30 – 2:00</div>
+              <div class="block-icon">🟢</div>
+              <div class="block-content">
+                <div class="block-title">Knowt Session</div>
+                <div class="block-sub">Search for:</div>
+                <div class="knowt-term">🔍 "AP CSP simulations modeling assumptions"</div>
+                <div class="knowt-term">🔍 "AP CSP data analysis programs metadata"</div>
+                <a class="knowt-link" href="https://knowt.com" target="_blank" rel="noopener">Open Knowt ↗</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── MAY 11 ── -->
+      <div class="day-card c-teal">
+        <div class="day-header">
+          <div class="day-num">11<small>MAY</small></div>
+          <div class="day-meta">
+            <div class="day-name">Sunday — Day 7</div>
+            <div class="day-theme">🌊 Internet &amp; Probability: The Internet + Random Values</div>
+          </div>
+          <span class="day-badge">Internet · Random</span>
+        </div>
+        <div class="day-body">
+          <div class="blocks">
+            <div class="block quiz">
+              <div class="block-time">0:00 – 0:50</div>
+              <div class="block-icon">🌐</div>
+              <div class="block-content">
+                <div class="block-title">The Internet Quiz</div>
+                <div class="block-sub">Key concepts: IP/DNS/HTTP/HTTPS, packets &amp; routing, fault tolerance, open protocols, cybersecurity threats (phishing, DDoS, malware).</div>
+              </div>
+            </div>
+            <div class="block quiz">
+              <div class="block-time">0:50 – 1:30</div>
+              <div class="block-icon">🎯</div>
+              <div class="block-content">
+                <div class="block-title">Random Values Quiz</div>
+                <div class="block-sub">Key concepts: RANDOM(a, b) generates integers a–b inclusive, using randomness in simulations, how randomness affects repeatability.</div>
+              </div>
+            </div>
+            <div class="block knowt">
+              <div class="block-time">1:30 – 2:00</div>
+              <div class="block-icon">🟢</div>
+              <div class="block-content">
+                <div class="block-title">Knowt Session</div>
+                <div class="block-sub">Search for:</div>
+                <div class="knowt-term">🔍 "AP CSP internet protocols TCP IP packet routing"</div>
+                <div class="knowt-term">🔍 "AP CSP cybersecurity random values"</div>
+                <a class="knowt-link" href="https://knowt.com" target="_blank" rel="noopener">Open Knowt ↗</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── MAY 12 ── -->
+      <div class="day-card c-green">
+        <div class="day-header">
+          <div class="day-num">12<small>MAY</small></div>
+          <div class="day-meta">
+            <div class="day-name">Monday — Day 8</div>
+            <div class="day-theme">🟢 Libraries + Full Weak-Area Review</div>
+          </div>
+          <span class="day-badge">Review</span>
+        </div>
+        <div class="day-body">
+          <div class="blocks">
+            <div class="block quiz">
+              <div class="block-time">0:00 – 0:35</div>
+              <div class="block-icon">📦</div>
+              <div class="block-content">
+                <div class="block-title">Libraries Quiz</div>
+                <div class="block-sub">Key concepts: API usage, importing libraries, calling library procedures, benefits of code reuse, documentation reading.</div>
+              </div>
+            </div>
+            <div class="block quiz">
+              <div class="block-time">0:35 – 1:25</div>
+              <div class="block-icon">🔍</div>
+              <div class="block-content">
+                <div class="block-title">Targeted Weak-Area Review</div>
+                <div class="block-sub">Return to your error log from Day 1. Re-attempt any question types you missed. Use the College Board reference sheet.</div>
+              </div>
+            </div>
+            <div class="block knowt">
+              <div class="block-time">1:25 – 2:00</div>
+              <div class="block-icon">🟢</div>
+              <div class="block-content">
+                <div class="block-title">Knowt Session — All Big Ideas</div>
+                <div class="block-sub">Search for:</div>
+                <div class="knowt-term">🔍 "AP CSP libraries APIs abstraction reuse"</div>
+                <div class="knowt-term">🔍 "AP CSP big ideas review all units"</div>
+                <a class="knowt-link" href="https://knowt.com" target="_blank" rel="noopener">Open Knowt ↗</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── MAY 13 ── -->
+      <div class="day-card c-slate">
+        <div class="day-header">
+          <div class="day-num">13<small>MAY</small></div>
+          <div class="day-meta">
+            <div class="day-name">Tuesday — Day 9 (Eve of Exam)</div>
+            <div class="day-theme">⚪ Light Review &amp; Rest — No New Material</div>
+          </div>
+          <span class="day-badge">Exam Eve</span>
+        </div>
+        <div class="day-body">
+          <div class="blocks">
+            <div class="block quiz">
+              <div class="block-time">0:00 – 0:45</div>
+              <div class="block-icon">📖</div>
+              <div class="block-content">
+                <div class="block-title">Light Flashcard Review</div>
+                <div class="block-sub">Skim your notes and Knowt sets — do NOT start new quizzes. Focus on formulas, vocabulary, and AP pseudocode syntax.</div>
+              </div>
+            </div>
+            <div class="block knowt">
+              <div class="block-time">0:45 – 1:30</div>
+              <div class="block-icon">🟢</div>
+              <div class="block-content">
+                <div class="block-title">Knowt Final Review</div>
+                <div class="block-sub">Search for:</div>
+                <div class="knowt-term">🔍 "AP CSP final exam review all topics"</div>
+                <div class="knowt-term">🔍 "AP CSP pseudocode reference vocabulary"</div>
+                <a class="knowt-link" href="https://knowt.com" target="_blank" rel="noopener">Open Knowt ↗</a>
+              </div>
+            </div>
+            <div class="block" style="border-left-color: var(--slate);">
+              <div class="block-time">1:30 – 2:00</div>
+              <div class="block-icon">😴</div>
+              <div class="block-content">
+                <div class="block-title">Rest &amp; Prepare</div>
+                <div class="block-sub">Pack your pencils, set two alarms, and get to sleep early. A rested brain outperforms a cramming one.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── MAY 14 — EXAM DAY ── -->
+      <div class="exam-day-card">
+        <div class="exam-emoji">🎯</div>
+        <h3>May 14 — Exam Day</h3>
+        <p>AP Computer Science Principles Exam · You've got this.</p>
+        <p style="margin-top:.5rem; font-size:.8rem;">Arrive early · Bring two #2 pencils · Breathe</p>
+      </div>
+
+    </div><!-- /calendar -->
+  </div><!-- /left col -->
+
+  <!-- RIGHT: SIDEBAR -->
+  <div class="sidebar">
+
+    <!-- PRIORITY LIST -->
+    <div class="priority-card">
+      <div class="priority-header">
+        <h2>🎯 Topic Priority List</h2>
+        <p>Highest impact items first — tackle in this order</p>
+      </div>
+      <ul class="priority-list">
+
+        <li class="priority-item in-progress-item p-critical">
+          <div class="pulse-dot"></div>
+          <div class="p-name">Supplemental Practice Exam MCQ</div>
+          <span class="p-badge" style="background:rgba(239,68,68,.2);color:#fca5a5;">IN PROGRESS</span>
+        </li>
+
+        <li class="priority-item p-critical">
+          <div class="p-rank">2</div>
+          <div class="p-dot"></div>
+          <div class="p-name">Written Response Supplemental Practice Exam</div>
+          <span class="p-badge">Critical</span>
+        </li>
+
+        <li class="priority-item p-high">
+          <div class="p-rank">3</div>
+          <div class="p-dot"></div>
+          <div class="p-name">Algorithmic Efficiency Quiz</div>
+          <span class="p-badge">High</span>
+        </li>
+
+        <li class="priority-item p-high">
+          <div class="p-rank">4</div>
+          <div class="p-dot"></div>
+          <div class="p-name">Undecidable Problems Quiz</div>
+          <span class="p-badge">High</span>
+        </li>
+
+        <li class="priority-item p-high">
+          <div class="p-rank">5</div>
+          <div class="p-dot"></div>
+          <div class="p-name">Identifying and Correcting Errors Quiz</div>
+          <span class="p-badge">High</span>
+        </li>
+
+        <li class="priority-item p-med">
+          <div class="p-rank">6</div>
+          <div class="p-dot"></div>
+          <div class="p-name">Lists Quiz (MCQs)</div>
+          <span class="p-badge">Medium</span>
+        </li>
+
+        <li class="priority-item p-med">
+          <div class="p-rank">7</div>
+          <div class="p-dot"></div>
+          <div class="p-name">Iteration Quiz (MCQs)</div>
+          <span class="p-badge">Medium</span>
+        </li>
+
+        <li class="priority-item p-med">
+          <div class="p-rank">8</div>
+          <div class="p-dot"></div>
+          <div class="p-name">Calling Procedures Quiz</div>
+          <span class="p-badge">Medium</span>
+        </li>
+
+        <li class="priority-item p-med">
+          <div class="p-rank">9</div>
+          <div class="p-dot"></div>
+          <div class="p-name">Simulations Quiz</div>
+          <span class="p-badge">Medium</span>
+        </li>
+
+        <li class="priority-item p-low">
+          <div class="p-rank">10</div>
+          <div class="p-dot"></div>
+          <div class="p-name">Using Programs with Data Quiz</div>
+          <span class="p-badge">Lower</span>
+        </li>
+
+        <li class="priority-item p-low">
+          <div class="p-rank">11</div>
+          <div class="p-dot"></div>
+          <div class="p-name">The Internet Quiz</div>
+          <span class="p-badge">Lower</span>
+        </li>
+
+        <li class="priority-item p-low">
+          <div class="p-rank">12</div>
+          <div class="p-dot"></div>
+          <div class="p-name">Random Values Quiz</div>
+          <span class="p-badge">Lower</span>
+        </li>
+
+        <li class="priority-item p-low">
+          <div class="p-rank">13</div>
+          <div class="p-dot"></div>
+          <div class="p-name">Libraries Quiz</div>
+          <span class="p-badge">Lower</span>
+        </li>
+
+      </ul>
+    </div>
+
+    <!-- KNOWT QUICK-REF -->
+    <div class="knowt-card">
+      <div class="knowt-card-header">
+        <h2>🟢 Knowt Quick-Reference</h2>
+        <span>knowt.com</span>
+      </div>
+      <ul class="knowt-ref-list">
+        <li class="knowt-ref-item">
+          <div class="knowt-ref-topic">MCQ Exam Practice</div>
+          <span class="knowt-ref-term">"AP CSP practice MCQ 2025 2026"</span>
+        </li>
+        <li class="knowt-ref-item">
+          <div class="knowt-ref-topic">Written Response / FRQ</div>
+          <span class="knowt-ref-term">"AP CSP written response FRQ"</span>
+        </li>
+        <li class="knowt-ref-item">
+          <div class="knowt-ref-topic">Algorithmic Efficiency</div>
+          <span class="knowt-ref-term">"AP CSP efficiency heuristics big O"</span>
+        </li>
+        <li class="knowt-ref-item">
+          <div class="knowt-ref-topic">Undecidable Problems</div>
+          <span class="knowt-ref-term">"AP CSP halting problem undecidable"</span>
+        </li>
+        <li class="knowt-ref-item">
+          <div class="knowt-ref-topic">Errors &amp; Debugging</div>
+          <span class="knowt-ref-term">"AP CSP debugging syntax logic runtime"</span>
+        </li>
+        <li class="knowt-ref-item">
+          <div class="knowt-ref-topic">Lists &amp; Data Structures</div>
+          <span class="knowt-ref-term">"AP CSP lists arrays traversal 1-indexed"</span>
+        </li>
+        <li class="knowt-ref-item">
+          <div class="knowt-ref-topic">Iteration / Loops</div>
+          <span class="knowt-ref-term">"AP CSP repeat until for each loop"</span>
+        </li>
+        <li class="knowt-ref-item">
+          <div class="knowt-ref-topic">Procedures &amp; Abstraction</div>
+          <span class="knowt-ref-term">"AP CSP procedures parameters return"</span>
+        </li>
+        <li class="knowt-ref-item">
+          <div class="knowt-ref-topic">Simulations</div>
+          <span class="knowt-ref-term">"AP CSP simulations random modeling"</span>
+        </li>
+        <li class="knowt-ref-item">
+          <div class="knowt-ref-topic">Programs with Data</div>
+          <span class="knowt-ref-term">"AP CSP data analysis metadata programs"</span>
+        </li>
+        <li class="knowt-ref-item">
+          <div class="knowt-ref-topic">The Internet</div>
+          <span class="knowt-ref-term">"AP CSP internet TCP IP DNS packets"</span>
+        </li>
+        <li class="knowt-ref-item">
+          <div class="knowt-ref-topic">Random Values</div>
+          <span class="knowt-ref-term">"AP CSP random values RANDOM function"</span>
+        </li>
+        <li class="knowt-ref-item">
+          <div class="knowt-ref-topic">Libraries &amp; APIs</div>
+          <span class="knowt-ref-term">"AP CSP libraries API reuse abstraction"</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- EXAM DAY TIPS -->
+    <div class="tips-card">
+      <h3>💡 Exam Day Tips</h3>
+      <ul class="tips-list">
+        <li>Use the AP pseudocode reference sheet — don't memorize syntax cold</li>
+        <li>For MCQ, eliminate 2 wrong answers first</li>
+        <li>For written response: state the purpose, then explain the algorithm step-by-step</li>
+        <li>Flag tricky questions and come back — don't get stuck</li>
+        <li>RANDOM(a, b) is inclusive of both a and b in AP CSP</li>
+        <li>List indexing starts at 1, not 0</li>
+        <li>Every IP address is unique; domain names use DNS to resolve</li>
+        <li>Sleep 8+ hrs the night before — this is not optional</li>
+      </ul>
+    </div>
+
+  </div><!-- /sidebar -->
+
+</div><!-- /wrapper -->
+
+<script>
+  function updateCountdown() {
+    const exam = new Date('2026-05-14T08:00:00');
+    const now = new Date();
+    const diff = exam - now;
+    if (diff <= 0) {
+      document.getElementById('countdown-text').textContent = 'Exam day! Go crush it!';
+      return;
+    }
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hrs  = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    document.getElementById('countdown-text').textContent =
+      `${days} days, ${hrs} hrs, ${mins} min until your AP CSP exam`;
+  }
+  updateCountdown();
+  setInterval(updateCountdown, 30000);
+</script>
+
+</body>
+</html>
