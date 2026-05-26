@@ -1,6 +1,12 @@
 import glob
-from nbconvert import MarkdownExporter
-from nbconvert.utils.exceptions import ConversionException
+try:
+    from nbconvert import MarkdownExporter
+    from nbconvert.utils.exceptions import ConversionException
+    NBCONVERT_AVAILABLE = True
+except Exception:
+    NBCONVERT_AVAILABLE = False
+    class ConversionException(Exception):
+        pass
 import os
 import nbformat
 import yaml
@@ -54,6 +60,28 @@ def ensure_directory_exists(path):
     os.makedirs(os.path.dirname(path), exist_ok=True)
 
 
+def _notebook_to_markdown(notebook):
+    parts = []
+    for cell in notebook.cells:
+        if cell.cell_type == "markdown":
+            parts.append(cell.source)
+        elif cell.cell_type == "code":
+            if cell.source.strip():
+                parts.append(f"```\n{cell.source}\n```")
+            for output in cell.get("outputs", []):
+                if output.get("output_type") == "stream":
+                    text = "".join(output.get("text", []))
+                    if text.strip():
+                        parts.append(f"```\n{text}\n```")
+                elif output.get("output_type") in ("display_data", "execute_result"):
+                    data = output.get("data", {})
+                    if "text/plain" in data:
+                        text = "".join(data["text/plain"])
+                        if text.strip():
+                            parts.append(f"```\n{text}\n```")
+    return "\n\n".join(parts)
+
+
 # Function to convert the notebook to Markdown with front matter
 def convert_notebook_to_markdown_with_front_matter(notebook_file):
     with open(notebook_file, "r", encoding="utf-8") as file:
@@ -61,8 +89,7 @@ def convert_notebook_to_markdown_with_front_matter(notebook_file):
         front_matter = extract_front_matter(notebook_file, notebook.cells[0])
         notebook.cells.pop(0)
         process_mermaid_cells(notebook)
-        exporter = MarkdownExporter()
-        markdown, _ = exporter.from_notebook_node(notebook)
+        markdown = _notebook_to_markdown(notebook)
         front_matter_content = (
             "---\n"
             + "\n".join(f"{key}: {value}" for key, value in front_matter.items())
