@@ -93,6 +93,41 @@ permalink: /haram-guesser/
   }
 
   /* ── Menu ── */
+  .hg-mode-row {
+    display: flex;
+    gap: 28px;
+    justify-content: center;
+    margin-top: 16px;
+  }
+  .hg-mode-card {
+    flex: 1;
+    max-width: 42%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding: 36px 24px 32px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: none;
+    text-align: center;
+  }
+  .hg-mode-card .hg-mode-icon { font-size: 3rem; line-height: 1; }
+  .hg-mode-card .hg-mode-title { font-size: 1.15rem; font-weight: 800; }
+  .hg-mode-card .hg-mode-desc { font-size: 0.82rem; opacity: 0.8; line-height: 1.45; }
+  .hg-mode-primary {
+    background: linear-gradient(145deg, #c9a84c, #e8c96d);
+    color: #1a1200;
+    box-shadow: 0 6px 28px rgba(201,168,76,.35);
+  }
+  .hg-mode-primary:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(201,168,76,.5); }
+  .hg-mode-locked {
+    background: rgba(255,255,255,.06);
+    color: #888;
+    border: 1px solid rgba(255,255,255,.12);
+    cursor: not-allowed;
+  }
   .hg-menu-btn {
     display: block;
     width: 100%;
@@ -216,7 +251,7 @@ permalink: /haram-guesser/
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: #666;
+    color: #ccc;
     text-align: center;
     margin-bottom: 6px;
   }
@@ -238,7 +273,7 @@ permalink: /haram-guesser/
     font-size:0.9rem; outline:none; transition:border .2s;
   }
   .hg-input-row input:focus { border-color:#c9a84c; }
-  .hg-input-row input::placeholder { color:#555; }
+  .hg-input-row input::placeholder { color:#999; }
   .hg-btn {
     padding:11px 18px; border:none; border-radius:9px;
     font-weight:700; font-size:0.85rem; cursor:pointer; transition:all .2s; white-space:nowrap;
@@ -259,7 +294,7 @@ permalink: /haram-guesser/
   }
   .hg-guess-row select option { background:#1a1a2e; color:#fff; }
 
-  .hg-hint { font-size:0.75rem; color:#555; text-align:center; }
+  .hg-hint { font-size:0.75rem; color:#bbb; text-align:center; }
 
   /* ── CPU overlay — centered ── */
   .hg-cpu-overlay {
@@ -486,8 +521,18 @@ permalink: /haram-guesser/
       <div class="hg-card">
         <div class="hg-title">🕌 Guess the Haram</div>
         <div class="hg-sub">Ask yes/no questions to figure out the other player's haram word</div>
-        <button class="hg-menu-btn hg-primary" onclick="hgStart()">▶ &nbsp; Player vs Computer</button>
-        <button class="hg-menu-btn hg-disabled" disabled>🔒 &nbsp; Player vs Player &nbsp;(Coming Soon)</button>
+        <div class="hg-mode-row">
+          <button class="hg-mode-card hg-mode-primary" onclick="hgStart()">
+            <div class="hg-mode-icon">🤖</div>
+            <div class="hg-mode-title">Player vs Computer</div>
+            <div class="hg-mode-desc">Go head-to-head against the AI — ask questions, guess the haram word</div>
+          </button>
+          <div class="hg-mode-card hg-mode-locked">
+            <div class="hg-mode-icon">🔒</div>
+            <div class="hg-mode-title">Player vs Player</div>
+            <div class="hg-mode-desc">Coming soon — challenge a friend on the same device</div>
+          </div>
+        </div>
       </div>
     </div>
 
