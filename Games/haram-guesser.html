@@ -12,7 +12,7 @@ permalink: /haram-guesser/
     width: 100vw; height: 100vh;
     z-index: 99999;
     background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-    overflow-y: auto;
+    overflow: hidden;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #e8e8e8;
     display: flex;
@@ -21,24 +21,33 @@ permalink: /haram-guesser/
   }
   #haram-game-overlay * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  /* ── Layout ── */
+  /* ── Layout: wrap fills full height ── */
   .hg-wrap {
     width: 100%;
-    max-width: 780px;
-    padding: 28px 16px 40px;
+    max-width: 860px;
+    padding: 20px 20px 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
   }
 
-  /* ── Screens ── */
-  .hg-screen { display: none; }
-  .hg-screen.active { display: block; }
+  /* ── Screens fill the wrap ── */
+  .hg-screen { display: none; flex: 1; min-height: 0; }
+  .hg-screen.active { display: flex; flex-direction: column; flex: 1; min-height: 0; }
 
-  /* ── Card ── */
+  /* ── Card fills the screen ── */
   .hg-card {
     background: rgba(255,255,255,0.06);
     border: 1px solid rgba(255,255,255,0.12);
     border-radius: 18px;
-    padding: 28px 32px;
+    padding: 24px 28px;
     backdrop-filter: blur(10px);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow-y: auto;
   }
 
   .hg-title {
@@ -123,14 +132,14 @@ permalink: /haram-guesser/
   .hg-badge.cpu { background:rgba(251,146,60,.12); color:#fb923c; border:1px solid #fb923c; }
   .hg-round    { padding:6px 14px; border-radius:20px; background:rgba(255,255,255,.08); font-size:0.85rem; color:#aaa; }
 
-  /* ── Log ── */
+  /* ── Log — grows to fill available space ── */
   .hg-log {
     background: rgba(0,0,0,.3);
     border: 1px solid rgba(255,255,255,.08);
     border-radius: 10px;
     padding: 12px 14px;
-    min-height: 100px;
-    max-height: 200px;
+    flex: 1;
+    min-height: 80px;
     overflow-y: auto;
     margin-bottom: 14px;
     font-size: 0.87rem;
@@ -230,8 +239,32 @@ permalink: /haram-guesser/
   .hg-back button { background:none; border:none; color:#777; cursor:pointer; font-size:0.88rem; text-decoration:underline; }
   .hg-back button:hover { color:#ccc; }
 
+  /* Word picker: scrollable word area, confirm pinned to bottom */
+  #hg-pick .hg-card {
+    overflow: hidden; /* card itself doesn't scroll */
+  }
+  #hg-word-grid-wrap {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+    padding-right: 4px;
+    margin-bottom: 14px;
+  }
+  #hg-word-grid-wrap::-webkit-scrollbar { width: 5px; }
+  #hg-word-grid-wrap::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
+
+  /* Menu: center content vertically */
+  #hg-menu .hg-card {
+    justify-content: center;
+  }
+
+  /* Game screen: log fills remaining vertical space */
+  #hg-game .hg-card {
+    overflow: hidden;
+  }
+
   @media(max-width:520px){
-    .hg-card { padding:20px 14px; }
+    .hg-card { padding:16px 12px; }
     .hg-title { font-size:1.7rem; }
     .hg-word-grid { grid-template-columns:repeat(2,1fr); }
   }
@@ -255,8 +288,10 @@ permalink: /haram-guesser/
       <div class="hg-card">
         <div class="hg-title" style="font-size:1.5rem;">Choose Your Secret Word</div>
         <div class="hg-sub">The computer won't see your choice</div>
-        <div id="hg-word-grid"></div>
-        <button class="hg-btn hg-gold" style="width:100%;padding:14px;font-size:0.95rem;" onclick="hgConfirmWord()">Confirm Word →</button>
+        <div id="hg-word-grid-wrap">
+          <div id="hg-word-grid"></div>
+        </div>
+        <button class="hg-btn hg-gold" style="width:100%;padding:14px;font-size:0.95rem;flex-shrink:0;" onclick="hgConfirmWord()">Confirm Word →</button>
       </div>
     </div>
 
