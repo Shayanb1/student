@@ -777,60 +777,133 @@ function hgAnswer(question, word) {
 //  COMPUTER AI
 // ═══════════════════════════════════════
 const HG_QB = [
-  { q:"Is it something you can eat or drink?",             f:w=>HG_WORDS[w].isFood||HG_WORDS[w].isDrink },
-  { q:"Is it a physical object you can hold?",             f:w=>HG_WORDS[w].isObject },
-  { q:"Is it something you do — an action?",                f:w=>HG_WORDS[w].isAction },
-  { q:"Is it related to financial matters?",               f:w=>HG_WORDS[w].isFinancial },
-  { q:"Is it related to speech or what you say?",          f:w=>HG_WORDS[w].isSpeech },
-  { q:"Is it related to worship or Islamic belief?",       f:w=>HG_WORDS[w].isWorship },
-  { q:"Is it a form of entertainment?",                    f:w=>HG_WORDS[w].isEntertainment },
-  { q:"Is it related to the body or appearance?",          f:w=>HG_WORDS[w].isBody },
-  { q:"Does it involve an animal?",                        f:w=>HG_WORDS[w].isAnimal },
-  { q:"Is it an intoxicant?",                              f:w=>HG_WORDS[w].isIntoxicant },
-  { q:"Is it abstract — not a physical thing?",            f:w=>HG_WORDS[w].isAbstract },
-  { q:"Is it related to deception or dishonesty?",         f:w=>HG_WORDS[w].isDeception },
-  { q:"Is it related to the supernatural or occult?",      f:w=>HG_WORDS[w].isOccult },
-  { q:"Is it only haram specifically for men?",            f:w=>HG_WORDS[w].isMenOnly },
-  { q:"Is it a type of meat?",                             f:w=>HG_WORDS[w].isMeat },
-  { q:"Does it involve predicting the future?",            f:w=>['fortune telling','astrology'].includes(w) },
-  { q:"Is it related to stars or horoscopes?",             f:w=>w==='astrology' },
-  { q:"Does it involve harming or taking from others?",    f:w=>['stealing','bribery','slander','animal fighting','price fixing','dirty money','selling bad stuff'].includes(w) },
-  { q:"Is it the gravest sin in Islam?",                   f:w=>w==='shirk' },
-  { q:"Is it related to self-harm or hurting yourself?",   f:w=>HG_WORDS[w].isSelfHarm },
-  { q:"Is it something you say or express with words?",    f:w=>HG_WORDS[w].isSpeech },
-  { q:"Does it involve money or financial transactions?",  f:w=>HG_WORDS[w].isFinancial },
-  { q:"Is it related to music, games, or leisure?",        f:w=>['music','gambling','pointless games','animal fighting','pornography'].includes(w) },
-  { q:"Is it something specifically related to worship or aqeedah?", f:w=>HG_WORDS[w].isWorship },
-  { q:"Is it a type of food or something consumed?",       f:w=>HG_WORDS[w].isFood||HG_WORDS[w].isDrink },
+  // ── Category broad ──
+  { q:"Is it in the food or drink category?",                   f:w=>HG_WORDS[w].cat==='food' },
+  { q:"Is it in the financial category?",                       f:w=>HG_WORDS[w].cat==='financial' },
+  { q:"Is it in the speech category?",                          f:w=>HG_WORDS[w].cat==='speech' },
+  { q:"Is it in the worship or belief category?",               f:w=>HG_WORDS[w].cat==='worship' },
+  { q:"Is it in the entertainment category?",                   f:w=>HG_WORDS[w].cat==='entertainment' },
+  { q:"Is it in the body or appearance category?",              f:w=>HG_WORDS[w].cat==='body' },
+  { q:"Is it in the self-harm category?",                       f:w=>HG_WORDS[w].cat==='selfharm' },
+  // ── Physical nature ──
+  { q:"Is it a physical object you can hold?",                  f:w=>HG_WORDS[w].isObject },
+  { q:"Is it a liquid?",                                        f:w=>['alcohol','blood'].includes(w) },
+  { q:"Is it something you eat?",                               f:w=>HG_WORDS[w].isFood },
+  { q:"Is it something you drink?",                             f:w=>HG_WORDS[w].isDrink },
+  { q:"Is it a type of meat?",                                  f:w=>HG_WORDS[w].isMeat },
+  { q:"Is it abstract — not a physical thing?",                 f:w=>HG_WORDS[w].isAbstract },
+  { q:"Is it something you wear or put on your body?",          f:w=>['tattoos','silk','gold','wearing a cross'].includes(w) },
+  { q:"Is it something you can buy in a store?",                f:w=>HG_WORDS[w].isObject },
+  // ── Actions ──
+  { q:"Is it something you do — an action?",                    f:w=>HG_WORDS[w].isAction },
+  { q:"Is it something said with your mouth?",                  f:w=>HG_WORDS[w].isSpeech },
+  { q:"Does it involve giving or receiving money unlawfully?",  f:w=>['riba','bribery','stealing','fraud','price fixing','dirty money','selling bad stuff'].includes(w) },
+  { q:"Does it involve physically hurting yourself?",           f:w=>HG_WORDS[w].isSelfHarm },
+  { q:"Does it involve harming or cheating someone else?",      f:w=>['stealing','bribery','slander','animal fighting','price fixing','dirty money','selling bad stuff','fraud'].includes(w) },
+  { q:"Is it something done secretly or in private?",           f:w=>['black magic','fortune telling','stealing','pornography','dirty money'].includes(w) },
+  // ── Intoxicants ──
+  { q:"Can it make you drunk or high?",                         f:w=>HG_WORDS[w].isIntoxicant },
+  { q:"Can it cause addiction?",                                f:w=>['alcohol','drugs','muskir','gambling'].includes(w) },
+  { q:"Does it affect the mind or judgment?",                   f:w=>['alcohol','drugs','muskir','black magic'].includes(w) },
+  // ── Animals ──
+  { q:"Does it involve an animal?",                             f:w=>HG_WORDS[w].isAnimal },
+  { q:"Does it come from a pig?",                               f:w=>w==='pork' },
+  { q:"Is it from a bird?",                                     f:w=>w==='eagle meat' },
+  { q:"Does it involve making animals fight?",                  f:w=>w==='animal fighting' },
+  { q:"Is it from an animal that was not slaughtered properly?",f:w=>['carrion','pork','donkey meat','predator meat','eagle meat'].includes(w) },
+  { q:"Is it from a predator with claws or fangs?",             f:w=>w==='predator meat' },
+  { q:"Is it from a beast of burden?",                          f:w=>w==='donkey meat' },
+  // ── Financial ──
+  { q:"Is it a financial sin?",                                 f:w=>HG_WORDS[w].isFinancial },
+  { q:"Does it involve charging interest on a loan?",           f:w=>w==='riba' },
+  { q:"Does it involve betting or gambling?",                   f:w=>w==='gambling' },
+  { q:"Does it involve taking something without permission?",   f:w=>w==='stealing' },
+  { q:"Does it involve paying someone to act corruptly?",       f:w=>w==='bribery' },
+  { q:"Does it involve manipulating prices in the market?",     f:w=>w==='price fixing' },
+  { q:"Does it involve money gained from haram sources?",       f:w=>w==='dirty money' },
+  { q:"Does it involve selling something haram?",               f:w=>w==='selling bad stuff' },
+  { q:"Does it involve cheating or deceiving for money?",       f:w=>w==='fraud' },
+  // ── Speech ──
+  { q:"Does it involve talking badly about someone?",           f:w=>['backbiting','slander','spreading gossip','making fun','cursing'].includes(w) },
+  { q:"Does it involve saying something false?",                f:w=>['lying','slander','lying under oath','fraud'].includes(w) },
+  { q:"Does it involve spreading rumors or gossip?",            f:w=>['spreading gossip','backbiting','slander'].includes(w) },
+  { q:"Does it involve insulting or mocking others?",           f:w=>['making fun','cursing'].includes(w) },
+  { q:"Does it involve making a false oath?",                   f:w=>w==='lying under oath' },
+  { q:"Is it related to pride or arrogance?",                   f:w=>w==='arrogance' },
+  { q:"Does it involve talking behind someone's back?",         f:w=>['backbiting','slander','spreading gossip'].includes(w) },
+  { q:"Does it involve swearing or using bad words?",           f:w=>w==='cursing' },
+  // ── Worship / Occult ──
+  { q:"Is it related to worship or Islamic belief?",            f:w=>HG_WORDS[w].isWorship },
+  { q:"Is it related to the supernatural or occult?",           f:w=>HG_WORDS[w].isOccult },
+  { q:"Does it involve associating partners with Allah?",        f:w=>w==='shirk' },
+  { q:"Does it involve magic or casting spells?",               f:w=>w==='black magic' },
+  { q:"Does it involve reading horoscopes or star signs?",      f:w=>w==='astrology' },
+  { q:"Does it involve claiming to know the future?",           f:w=>['fortune telling','astrology'].includes(w) },
+  { q:"Does it involve worshipping at graves or shrines?",      f:w=>w==='praying to graves' },
+  { q:"Is it related to envy or wanting what others have?",     f:w=>w==='jealousy' },
+  { q:"Does it involve inventing new religious practices?",      f:w=>w==='making up religion' },
+  { q:"Is it the gravest sin in Islam?",                        f:w=>w==='shirk' },
+  { q:"Is it a sin of the heart — a feeling or attitude?",      f:w=>['jealousy','arrogance'].includes(w) },
+  // ── Entertainment ──
+  { q:"Is it a form of entertainment?",                         f:w=>HG_WORDS[w].isEntertainment },
+  { q:"Does it involve watching explicit content?",             f:w=>w==='pornography' },
+  { q:"Does it involve music or instruments?",                  f:w=>w==='music' },
+  { q:"Does it involve wasting or spending recklessly?",        f:w=>w==='wasting money' },
+  { q:"Is it a game or pastime that distracts from worship?",   f:w=>w==='pointless games' },
+  // ── Body / Appearance ──
+  { q:"Is it related to the body or physical appearance?",      f:w=>HG_WORDS[w].isBody },
+  { q:"Is it only haram for men?",                              f:w=>HG_WORDS[w].isMenOnly },
+  { q:"Does it permanently mark the skin?",                     f:w=>w==='tattoos' },
+  { q:"Is it a fabric or clothing material?",                   f:w=>w==='silk' },
+  { q:"Is it a precious metal worn as jewelry?",                f:w=>w==='gold' },
+  { q:"Does it involve altering the face or eyebrows?",         f:w=>w==='shaping eyebrows' },
+  { q:"Is it a symbol from another religion?",                  f:w=>w==='wearing a cross' },
+  { q:"Does it involve dressing like the opposite gender?",     f:w=>w==='dressing as opposite gender' },
+  { q:"Is it something worn as decoration?",                    f:w=>['gold','silk','wearing a cross','tattoos'].includes(w) },
+  // ── Self-harm ──
+  { q:"Does it involve ending your own life?",                  f:w=>w==='suicide' },
+  { q:"Does it involve self-inflicted physical harm?",          f:w=>['suicide','hurting yourself'].includes(w) },
+  { q:"Does it involve refusing to eat or starving yourself?",  f:w=>w==='starving yourself' },
+  // ── Cross-category ──
+  { q:"Is it related to deception or dishonesty?",              f:w=>HG_WORDS[w].isDeception },
+  { q:"Does it destroy relationships or tear families apart?",  f:w=>['gambling','alcohol','drugs','lying','backbiting','slander','spreading gossip','stealing'].includes(w) },
+  { q:"Is it something commonly done in non-Muslim cultures?",  f:w=>['alcohol','music','gambling','pornography','tattoos','pork','astrology'].includes(w) },
+  { q:"Can it physically harm your body?",                      f:w=>['alcohol','drugs','muskir','suicide','hurting yourself','starving yourself'].includes(w) },
+  { q:"Is it related to another religion besides Islam?",       f:w=>['wearing a cross','shirk','praying to graves'].includes(w) },
+  { q:"Is it something a Muslim scholar would classify as a major sin?", f:w=>['shirk','riba','murder (not in list)','black magic','stealing','lying under oath','backbiting'].includes(w) || ['shirk','riba','black magic','stealing','lying under oath'].includes(w) },
+  { q:"Does it involve another person besides yourself?",       f:w=>['bribery','stealing','fraud','price fixing','slander','making fun','cursing','lying under oath','spreading gossip','backbiting','animal fighting','selling bad stuff','dirty money'].includes(w) },
+  { q:"Is it something mentioned in the Quran as forbidden?",   f:w=>['pork','alcohol','blood','riba','shirk','gambling'].includes(w) },
+  { q:"Can it lead to punishment in Islamic law?",              f:w=>['stealing','murder','riba','drinking alcohol','adultery'].includes(w) || ['stealing','alcohol'].includes(w) },
+  { q:"Is it related to eating or food preparation?",           f:w=>['pork','carrion','donkey meat','predator meat','eagle meat','blood','starving yourself'].includes(w) },
 ];
 
 let hgCPU = {
-  secret:null, remaining:[], asked:new Set(), qSinceGuess:0,
+  secret:null, remaining:[], asked:new Set(), pool:[], qSinceGuess:0,
   init() {
-    this.secret = HG_WORD_LIST[Math.floor(Math.random()*HG_WORD_LIST.length)];
+    this.secret    = HG_WORD_LIST[Math.floor(Math.random()*HG_WORD_LIST.length)];
     this.remaining = [...HG_WORD_LIST];
-    this.asked.clear(); this.qSinceGuess = 0;
+    this.asked.clear();
+    this.pool      = [...HG_QB].sort(()=>Math.random()-0.5);
+    this.qSinceGuess = 0;
   },
   turn() {
     this.qSinceGuess++;
-    if (this.qSinceGuess >= 3 && this.remaining.length <= 3) {
+    if (this.remaining.length <= 2) {
       this.qSinceGuess = 0;
       return { type:'guess', w:this.remaining[Math.floor(Math.random()*this.remaining.length)] };
     }
-    let best=null, bestS=-1;
-    for (const e of HG_QB) {
-      if (this.asked.has(e.q)) continue;
-      const yes = this.remaining.filter(e.f).length;
-      const s   = Math.min(yes, this.remaining.length-yes);
-      if (s > bestS) { bestS=s; best=e; }
+    if (this.qSinceGuess >= 3 && this.remaining.length <= 5) {
+      this.qSinceGuess = 0;
+      return { type:'guess', w:this.remaining[Math.floor(Math.random()*this.remaining.length)] };
     }
-    if (best) { this.asked.add(best.q); return { type:'question', q:best.q, f:best.f }; }
+    const pick = this.pool.find(e => !this.asked.has(e.q));
+    if (pick) { this.asked.add(pick.q); return { type:'question', q:pick.q, f:pick.f }; }
     this.qSinceGuess = 0;
     return { type:'guess', w:this.remaining[Math.floor(Math.random()*this.remaining.length)] };
   },
   apply(filterFn, ans) {
-    if (ans==='Yes')  this.remaining = this.remaining.filter(filterFn);
-    if (ans==='No')   this.remaining = this.remaining.filter(w=>!filterFn(w));
+    if (ans==='Yes') this.remaining = this.remaining.filter(filterFn);
+    if (ans==='No')  this.remaining = this.remaining.filter(w=>!filterFn(w));
   }
 };
 
