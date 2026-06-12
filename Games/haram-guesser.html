@@ -298,9 +298,119 @@ permalink: /haram-guesser/
     justify-content: center;
   }
 
-  /* Game screen: log fills remaining vertical space */
+  /* Game screen */
   #hg-game .hg-card {
     overflow: hidden;
+  }
+  .hg-game-card {
+    display: flex;
+    flex-direction: column;
+  }
+  .hg-game-cols {
+    flex: 1;
+    display: flex;
+    gap: 24px;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  /* LEFT column — chat */
+  .hg-game-left {
+    flex: 1.15;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    border-right: 1px solid rgba(255,255,255,0.08);
+    padding-right: 24px;
+  }
+
+  /* RIGHT column — word details */
+  .hg-game-right {
+    flex: 0.85;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow-y: auto;
+  }
+  .hg-game-right::-webkit-scrollbar { width: 5px; }
+  .hg-game-right::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
+
+  /* Word detail panel */
+  .hg-word-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .hg-wp-name {
+    text-align: center;
+    padding: 20px 12px;
+    background: rgba(201,168,76,0.08);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 14px;
+  }
+  .hg-wp-arabic {
+    font-size: 1.9rem;
+    font-weight: 800;
+    color: #c9a84c;
+    letter-spacing: 1px;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .hg-wp-english {
+    font-size: 1.1rem;
+    color: #ddd;
+    font-weight: 600;
+  }
+  .hg-wp-cat {
+    font-size: 0.75rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 6px;
+    display: block;
+  }
+  .hg-wp-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+  }
+  .hg-tag {
+    padding: 5px 11px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: #bbb;
+  }
+  .hg-tag.active {
+    background: rgba(74,222,128,0.12);
+    border-color: rgba(74,222,128,0.4);
+    color: #4ade80;
+  }
+  .hg-tag.warn {
+    background: rgba(251,146,60,0.12);
+    border-color: rgba(251,146,60,0.4);
+    color: #fb923c;
+  }
+  .hg-wp-hint {
+    background: rgba(0,0,0,0.25);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 0.85rem;
+    color: #aaa;
+    line-height: 1.6;
+  }
+  .hg-wp-hint strong { color: #c9a84c; }
+  .hg-wp-divider {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #666;
+    margin-bottom: 2px;
   }
 
   @media(max-width:520px){
@@ -336,48 +446,63 @@ permalink: /haram-guesser/
 
     <!-- ══ GAME ══ -->
     <div id="hg-game" class="hg-screen">
-      <div class="hg-card">
+      <div class="hg-card hg-game-card">
+
+        <!-- Top bar -->
         <div class="hg-header">
           <div class="hg-title" style="font-size:1.3rem;margin-bottom:0;">🕌 Haram or Not?</div>
           <div style="display:flex;gap:8px;align-items:center;">
             <span id="hg-turn-badge" class="hg-badge you">Your Turn</span>
             <span id="hg-round" class="hg-round">Round 1</span>
+            <button class="hg-btn hg-gray" style="padding:6px 12px;font-size:0.8rem;" onclick="hgGoMenu()">← Menu</button>
           </div>
         </div>
 
-        <div class="hg-sec">Question &amp; Answer Log</div>
-        <div id="hg-log" class="hg-log">
-          <div class="hg-log-empty">No questions yet — you go first!</div>
-        </div>
+        <!-- Two-column body -->
+        <div class="hg-game-cols">
 
-        <div id="hg-cpu-overlay" class="hg-cpu-overlay">
-          <p>💭 Computer asks:</p>
-          <div id="hg-cpu-q" class="hg-cpu-q"></div>
-          <div class="hg-ans-btns">
-            <button class="hg-ans-btn hg-yes" onclick="hgAnswerCPU('Yes')">Yes</button>
-            <button class="hg-ans-btn hg-no"  onclick="hgAnswerCPU('No')">No</button>
-            <button class="hg-ans-btn hg-som" onclick="hgAnswerCPU('Sometimes')">Sometimes</button>
+          <!-- LEFT: chat -->
+          <div class="hg-game-left">
+            <div class="hg-sec">Question &amp; Answer Log</div>
+            <div id="hg-log" class="hg-log">
+              <div class="hg-log-empty">No questions yet — you go first!</div>
+            </div>
+
+            <div id="hg-cpu-overlay" class="hg-cpu-overlay">
+              <p>💭 Computer asks:</p>
+              <div id="hg-cpu-q" class="hg-cpu-q"></div>
+              <div class="hg-ans-btns">
+                <button class="hg-ans-btn hg-yes" onclick="hgAnswerCPU('Yes')">Yes</button>
+                <button class="hg-ans-btn hg-no"  onclick="hgAnswerCPU('No')">No</button>
+                <button class="hg-ans-btn hg-som" onclick="hgAnswerCPU('Sometimes')">Sometimes</button>
+              </div>
+            </div>
+
+            <div id="hg-player-area">
+              <div class="hg-sec">Ask a yes/no question</div>
+              <div class="hg-input-row">
+                <input id="hg-q-input" type="text" placeholder="e.g. Is it something you eat?"
+                  maxlength="120" onkeydown="if(event.key==='Enter')hgSubmitQ()">
+                <button class="hg-btn hg-gold" onclick="hgSubmitQ()">Ask</button>
+              </div>
+              <div class="hg-sec" style="margin-top:12px;">Or guess the word outright</div>
+              <div class="hg-guess-row">
+                <select id="hg-guess-sel"></select>
+                <button class="hg-btn hg-red" onclick="hgSubmitGuess()">Guess!</button>
+              </div>
+              <div class="hg-hint">Correct guess wins · Wrong guess costs your turn</div>
+            </div>
+
+            <div id="hg-cpu-thinking" style="display:none;text-align:center;padding:14px;color:#fb923c;">⏳ Computer is thinking…</div>
           </div>
-        </div>
 
-        <div id="hg-player-area">
-          <div class="hg-sec">Ask a yes/no question</div>
-          <div class="hg-input-row">
-            <input id="hg-q-input" type="text" placeholder="e.g. Is it something you eat?"
-              maxlength="120" onkeydown="if(event.key==='Enter')hgSubmitQ()">
-            <button class="hg-btn hg-gold" onclick="hgSubmitQ()">Ask</button>
+          <!-- RIGHT: your word details -->
+          <div class="hg-game-right">
+            <div class="hg-sec">Your Secret Word</div>
+            <div id="hg-word-panel" class="hg-word-panel"></div>
           </div>
-          <div class="hg-sec" style="margin-top:10px;">Or guess the word outright</div>
-          <div class="hg-guess-row">
-            <select id="hg-guess-sel"></select>
-            <button class="hg-btn hg-red" onclick="hgSubmitGuess()">Guess!</button>
-          </div>
-          <div class="hg-hint">Correct guess wins · Wrong guess costs your turn</div>
+
         </div>
-
-        <div id="hg-cpu-thinking" style="display:none;text-align:center;padding:16px;color:#fb923c;">⏳ Computer is thinking…</div>
-
-        <div class="hg-back"><button onclick="hgGoMenu()">← Back to Menu</button></div>
       </div>
     </div>
 
@@ -659,14 +784,130 @@ function hgConfirmWord() {
   if (!hgPlayerWord) { alert('Please select a word first!'); return; }
   hgCPU.init();
   hgTurn='player'; hgRound=1; hgLog=[]; hgPending=null;
-  // Build guess dropdown
   const sel = document.getElementById('hg-guess-sel');
   sel.innerHTML = HG_WORD_LIST.map(w=>`<option value="${w}">${HG_WORDS[w].display}</option>`).join('');
   hgRenderLog(); hgUpdateHeader();
   document.getElementById('hg-player-area').style.display='block';
   document.getElementById('hg-cpu-overlay').classList.remove('active');
   document.getElementById('hg-cpu-thinking').style.display='none';
+  hgBuildWordPanel(hgPlayerWord);
   hgShow('hg-game');
+}
+
+// ═══════════════════════════════════════
+//  WORD DETAIL PANEL
+// ═══════════════════════════════════════
+const HG_WORD_DESC = {
+  "pork":                      "The meat of pigs is explicitly forbidden in the Quran (2:173). It is considered najis (impure) and is haram for Muslims regardless of how it is prepared.",
+  "alcohol":                   "Khamr (intoxicants) is prohibited in Quran 5:90. It clouds the mind and is considered the mother of all evils. Even a small amount is haram.",
+  "drugs":                     "All intoxicants that impair the mind fall under the ruling of khamr. Narcotics and recreational drugs are strictly forbidden in Islam.",
+  "muskir":                    "Muskir refers specifically to any substance that causes intoxication. The Prophet ﷺ said: 'Every intoxicant is khamr, and every khamr is haram.'",
+  "blood":                     "Flowing blood is explicitly listed in Quran 2:173 as forbidden to consume. It is considered impure and harmful to the body.",
+  "carrion":                   "Maytah is the meat of an animal that died without proper Islamic slaughter. It is haram as it may carry disease and was not slaughtered in Allah's name.",
+  "donkey meat":               "Domestic donkeys were prohibited by the Prophet ﷺ on the day of Khaybar. Their meat is forbidden as narrated in Sahih Bukhari.",
+  "predator meat":             "Animals with fangs or claws that prey on other animals — such as lions, wolves, and eagles — are forbidden to eat according to authentic hadith.",
+  "eagle meat":                "Birds of prey with talons (Jawarieh) — eagles, falcons, hawks — are haram to eat. They are predators that hunt with claws.",
+  "riba":                      "Riba (usury/interest) is one of the gravest sins in Islam. Quran 2:275 declares war from Allah and His Messenger against those who deal in riba.",
+  "gambling":                  "Qimar is forbidden in Quran 5:90 alongside alcohol. It corrupts society, destroys wealth, and creates enmity between people.",
+  "bribery":                   "Rishwah is cursed by the Prophet ﷺ — both the giver and receiver. It undermines justice and corrupts governance.",
+  "fraud":                     "Deception in trade (ghish) is haram. The Prophet ﷺ said: 'Whoever cheats us is not one of us.' (Sahih Muslim)",
+  "stealing":                  "Sariqah is a major sin in Islam and one of the hudud crimes. It violates another's rights and destroys trust in society.",
+  "price fixing":              "Ihtikar — hoarding goods to inflate prices — is forbidden. The Prophet ﷺ cursed those who hoard and cause harm to the marketplace.",
+  "dirty money":               "Money earned through haram means is itself haram. Using, investing, or gifting such money spreads the haram further.",
+  "selling bad stuff":         "Selling haram products — alcohol, drugs, weapons to oppressors — is haram even if the seller is not the end user.",
+  "lying":                     "Kadhib is one of the signs of hypocrisy (nifaq). The Prophet ﷺ listed lying among the worst of character traits. Truth is obligatory in Islam.",
+  "backbiting":                "Gheebah is compared in the Quran (49:12) to eating your dead brother's flesh. Mentioning someone's faults in their absence is a major sin.",
+  "slander":                   "Buhtan is worse than backbiting — it is fabricating something false about a person. It is a grave sin that carries serious accountability.",
+  "arrogance":                 "Kibr (pride/arrogance) is one of the diseases of the heart. The Prophet ﷺ said no one with a mustard seed of kibr in their heart will enter Paradise.",
+  "making fun":                "Istihza' — mocking others for their appearance, religion, or status — is forbidden in Quran 49:11 and is a form of oppression.",
+  "cursing":                   "La'n (cursing) a believer or an innocent person is haram. The Prophet ﷺ said: 'Cursing a Muslim is wickedness.' (Bukhari)",
+  "lying under oath":          "Yamin al-Ghamus is a false oath sworn deliberately. It is called 'al-Ghamus' (the drowning oath) because it drowns the swearer in sin and hellfire.",
+  "spreading gossip":          "Nameemah is carrying tales between people to sow discord. The Prophet ﷺ said the one who spreads nameemah will not enter Paradise.",
+  "shirk":                     "Shirk is associating partners with Allah — the only unforgivable sin if one dies upon it (Quran 4:48). It is the gravest of all prohibitions in Islam.",
+  "black magic":               "Sihr (sorcery) is a major sin and one of the seven destroyers (al-sab' al-mubiqat). The practitioner of magic has committed kufr (Quran 2:102).",
+  "astrology":                 "Believing stars influence fate is a form of shirk. The Prophet ﷺ said: 'Whoever consults an astrologer and believes him has disbelieved.' (Abu Dawud)",
+  "fortune telling":           "Kahanah — visiting fortune tellers or psychics — invalidates 40 days of prayer if one believes their claims, per authentic hadith.",
+  "praying to graves":         "Calling upon the dead at graves or seeking their intercession directly is shirk. The Prophet ﷺ cursed those who build places of worship over graves.",
+  "jealousy":                  "Hasad (destructive envy) — wishing for someone's blessing to be removed — is a sin that burns good deeds as fire burns wood (hadith).",
+  "making up religion":        "Bid'ah is innovating in matters of worship without basis in Quran or Sunnah. The Prophet ﷺ said: 'Every innovation is misguidance.'",
+  "pornography":               "Fahsha (obscene content) is haram as it leads to zina, corrupts the mind and heart, and violates the modesty (haya) that is central to Islamic character.",
+  "animal fighting":           "Forcing animals to fight for entertainment is haram. The Prophet ﷺ forbade setting animals against each other. It is cruelty without purpose.",
+  "music":                     "Most scholars consider music with lewd lyrics, instruments associated with frivolity, or that leads to sin as haram. It is widely debated but widely restricted.",
+  "wasting money":             "Israf (extravagance) is condemned in the Quran 7:31. Allah does not love those who are wasteful. Wealth is a trust (amanah) to be used wisely.",
+  "pointless games":           "Lahw — idle entertainment that keeps one from prayer and remembrance of Allah — is haram. Time is precious and accountability is real.",
+  "tattoos":                   "Washm is permanently altering Allah's creation. The Prophet ﷺ cursed the tattooer and the tattooed (Bukhari). It is haram in all four madhabs.",
+  "silk":                      "Pure silk is haram for men to wear. The Prophet ﷺ said it is for women in the dunya and for believing men in the akhirah. Women may wear it.",
+  "gold":                      "Gold jewelry is haram for men to wear. The Prophet ﷺ took gold from a companion's hand calling it a 'piece of fire from hell'. Women may wear it.",
+  "shaping eyebrows":          "Nams — plucking or shaping eyebrows — is cursed by the Prophet ﷺ in Sahih Bukhari. It is considered altering Allah's creation without need.",
+  "wearing a cross":           "Wearing the Salib (cross) is haram as it is a symbol of a doctrine Islam rejects (the crucifixion). It also resembles the disbelievers in worship.",
+  "dressing as opposite gender":"Tashabbuh — men imitating women in dress or women imitating men — is cursed by the Prophet ﷺ. Gender distinctions are part of the fitra.",
+  "suicide":                   "Intihar is strictly forbidden in Islam. Quran 4:29 forbids taking your own life. The Prophet ﷺ described the punishment for suicide in the afterlife.",
+  "hurting yourself":          "Deliberately harming your own body is haram. The body is an amanah (trust) from Allah. Self-harm is forbidden under the principle of 'la darar wa la dirar.'",
+  "starving yourself":         "Intentionally starving oneself to harm the body is haram. The body has a right over you. Extreme fasting that endangers health is also forbidden.",
+};
+
+function hgBuildWordPanel(word) {
+  const p = HG_WORDS[word];
+  const panel = document.getElementById('hg-word-panel');
+  const parts = p.display.split('/');
+  const arabic  = parts[0];
+  const english = parts.slice(1).join('/');
+  const catLabel = HG_CATS[p.cat] || p.cat;
+  const desc = HG_WORD_DESC[word] || 'This word is forbidden in Islam.';
+
+  // Build tags from properties
+  const tagDefs = [
+    { key:'isFood',          label:'Food',            type:'active' },
+    { key:'isDrink',         label:'Drink',           type:'active' },
+    { key:'isIntoxicant',    label:'Intoxicant',      type:'warn'   },
+    { key:'isFinancial',     label:'Financial',       type:'active' },
+    { key:'isSpeech',        label:'Speech',          type:'active' },
+    { key:'isWorship',       label:'Worship/Aqeedah', type:'warn'   },
+    { key:'isEntertainment', label:'Entertainment',   type:'active' },
+    { key:'isBody',          label:'Body/Appearance', type:'active' },
+    { key:'isAnimal',        label:'Involves Animal', type:'active' },
+    { key:'isIntoxicant',    label:'Intoxicant',      type:'warn'   },
+    { key:'isObject',        label:'Physical Object', type:'active' },
+    { key:'isAction',        label:'Action/Deed',     type:'active' },
+    { key:'isAbstract',      label:'Abstract Concept',type:'active' },
+    { key:'isDeception',     label:'Deception',       type:'warn'   },
+    { key:'isOccult',        label:'Occult',          type:'warn'   },
+    { key:'isMeat',          label:'Type of Meat',    type:'active' },
+    { key:'isMenOnly',       label:'Haram for Men Only',type:'warn' },
+    { key:'isSelfHarm',      label:'Self-Harm',       type:'warn'   },
+  ];
+  // Deduplicate keys
+  const seen = new Set();
+  const activeTags = tagDefs.filter(t => {
+    if (seen.has(t.key)) return false;
+    seen.add(t.key);
+    return p[t.key];
+  });
+
+  panel.innerHTML = `
+    <div class="hg-wp-name">
+      <span class="hg-wp-arabic">${arabic}</span>
+      <span class="hg-wp-english">${english}</span>
+      <span class="hg-wp-cat">${catLabel}</span>
+    </div>
+
+    <div>
+      <div class="hg-wp-divider">Properties</div>
+      <div class="hg-wp-tags">
+        ${activeTags.map(t=>`<span class="hg-tag ${t.type}">${t.label}</span>`).join('')}
+        ${activeTags.length === 0 ? '<span class="hg-tag">General Prohibition</span>' : ''}
+      </div>
+    </div>
+
+    <div>
+      <div class="hg-wp-divider">Why it\'s Haram</div>
+      <div class="hg-wp-hint">${desc}</div>
+    </div>
+
+    <div class="hg-wp-hint" style="background:rgba(201,168,76,0.06);border-color:rgba(201,168,76,0.2);">
+      <strong>Tip:</strong> The computer doesn't know your word is <strong>${english}</strong>. Answer its questions honestly — it's trying to narrow down the list!
+    </div>
+  `;
 }
 
 // ═══════════════════════════════════════
