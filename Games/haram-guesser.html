@@ -11,90 +11,780 @@ permalink: /haram-guesser/
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Haram or Not?</title>
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #0d0d0d;
-      color: #e8e8e8;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      min-height: 100vh;
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
-      min-height: 80vh;
-      margin: 0;
-      padding: 2rem;
+      align-items: flex-start;
+      padding: 30px 16px;
+      color: #e8e8e8;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 820px;
+    }
+
+    /* ── Screens ── */
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* ── Card ── */
+    .card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 18px;
+      padding: 36px 40px;
+      backdrop-filter: blur(10px);
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.6rem;
+      color: #c9a84c;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+    .subtitle {
+      text-align: center;
+      color: #aaa;
+      margin-bottom: 32px;
+      font-size: 1rem;
+    }
+
+    /* ── Menu buttons ── */
+    .menu-btn {
+      display: block;
+      width: 100%;
+      padding: 18px;
+      font-size: 1.15rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.25s;
+      margin-bottom: 14px;
+      letter-spacing: 0.5px;
+    }
+    .menu-btn.primary {
+      background: linear-gradient(135deg, #c9a84c, #e8c96d);
+      color: #1a1200;
+    }
+    .menu-btn.primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,168,76,0.4); }
+    .menu-btn.disabled-btn {
+      background: rgba(255,255,255,0.07);
+      color: #666;
+      cursor: not-allowed;
+      border: 1px solid #333;
+    }
+
+    /* ── Word picker ── */
+    .word-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .word-chip {
+      padding: 12px 10px;
+      border-radius: 10px;
+      border: 2px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.05);
+      cursor: pointer;
+      text-align: center;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+      line-height: 1.3;
+    }
+    .word-chip:hover { border-color: #c9a84c; background: rgba(201,168,76,0.1); }
+    .word-chip.selected { border-color: #c9a84c; background: rgba(201,168,76,0.2); color: #c9a84c; font-weight: 700; }
+    .cat-label {
+      color: #c9a84c;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    /* ── Game screen ── */
+    .game-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .turn-badge {
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    .turn-badge.you { background: rgba(74,222,128,0.15); color: #4ade80; border: 1px solid #4ade80; }
+    .turn-badge.cpu { background: rgba(251,146,60,0.15); color: #fb923c; border: 1px solid #fb923c; }
+
+    .round-badge {
+      padding: 8px 18px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.08);
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+
+    /* ── Log ── */
+    .log-box {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 16px;
+      min-height: 140px;
+      max-height: 260px;
+      overflow-y: auto;
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+    }
+    .log-box::-webkit-scrollbar { width: 6px; }
+    .log-box::-webkit-scrollbar-track { background: transparent; }
+    .log-box::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
+
+    .log-empty { color: #555; font-style: italic; text-align: center; margin-top: 40px; }
+
+    .log-entry { margin-bottom: 10px; line-height: 1.5; }
+    .log-entry .who-you { color: #4ade80; font-weight: 700; }
+    .log-entry .who-cpu { color: #fb923c; font-weight: 700; }
+    .log-entry .q-text { color: #ddd; }
+    .log-entry .answer { font-weight: 700; color: #c9a84c; }
+    .log-entry .guess-text { color: #a78bfa; font-style: italic; }
+
+    /* ── Input area ── */
+    .input-area { margin-bottom: 20px; }
+    .input-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .input-row input {
+      flex: 1;
+      padding: 13px 16px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.07);
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border 0.2s;
+    }
+    .input-row input:focus { border-color: #c9a84c; }
+    .input-row input::placeholder { color: #666; }
+    .btn {
+      padding: 13px 22px;
+      border: none;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .btn-gold { background: linear-gradient(135deg, #c9a84c, #e8c96d); color: #1a1200; }
+    .btn-gold:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(201,168,76,0.4); }
+    .btn-red { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid #ef4444; }
+    .btn-red:hover { background: rgba(239,68,68,0.25); }
+    .btn-gray { background: rgba(255,255,255,0.1); color: #ccc; }
+    .btn-gray:hover { background: rgba(255,255,255,0.16); }
+
+    .guess-row { display: flex; gap: 10px; }
+    .guess-row select {
+      flex: 1;
+      padding: 13px 16px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.07);
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+    }
+    .guess-row select option { background: #1a1a2e; color: #fff; }
+
+    .hint-text {
+      font-size: 0.8rem;
+      color: #666;
       text-align: center;
     }
-    h1 {
-      font-size: 2.5rem;
-      color: #c9a84c;
-      margin-bottom: 0.5rem;
+
+    /* ── CPU answer overlay ── */
+    .cpu-overlay {
+      background: rgba(251,146,60,0.08);
+      border: 1px solid rgba(251,146,60,0.3);
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-bottom: 20px;
+      display: none;
     }
-    p {
-      color: #aaa;
-      max-width: 520px;
-      line-height: 1.7;
-      margin-bottom: 1.5rem;
-    }
-    .badge {
-      background: #1a1a1a;
-      border: 1px solid #333;
+    .cpu-overlay.active { display: block; }
+    .cpu-overlay p { margin-bottom: 10px; color: #fb923c; font-weight: 600; }
+    .cpu-overlay .q-display { color: #eee; font-style: italic; margin-bottom: 14px; }
+    .answer-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+    .ans-btn {
+      padding: 10px 22px;
       border-radius: 8px;
-      padding: 1rem 2rem;
-      margin-bottom: 1.5rem;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
       font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+    .ans-btn.yes { background: rgba(74,222,128,0.15); color: #4ade80; border: 1px solid #4ade80; }
+    .ans-btn.yes:hover { background: rgba(74,222,128,0.3); }
+    .ans-btn.no { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid #ef4444; }
+    .ans-btn.no:hover { background: rgba(239,68,68,0.3); }
+    .ans-btn.sometimes { background: rgba(250,204,21,0.15); color: #facc15; border: 1px solid #facc15; }
+    .ans-btn.sometimes:hover { background: rgba(250,204,21,0.3); }
+
+    /* ── End screen ── */
+    .end-icon { font-size: 5rem; text-align: center; margin-bottom: 16px; }
+    .end-title { font-size: 2rem; font-weight: 800; text-align: center; margin-bottom: 8px; }
+    .end-title.win { color: #4ade80; }
+    .end-title.lose { color: #ef4444; }
+    .reveal-box {
+      background: rgba(0,0,0,0.3);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin: 24px 0;
+    }
+    .reveal-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.07); font-size: 1rem; }
+    .reveal-row:last-child { border-bottom: none; }
+    .reveal-label { color: #888; }
+    .reveal-val { font-weight: 700; color: #c9a84c; }
+
+    section.section-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
       color: #888;
+      margin-bottom: 10px;
     }
-    .badge strong { color: #c9a84c; }
-    code {
-      background: #1a1a1a;
-      border: 1px solid #333;
-      border-radius: 6px;
-      padding: 0.8rem 1.4rem;
-      font-size: 0.95rem;
-      color: #7ec8e3;
-      display: inline-block;
-      margin: 0.3rem 0;
+
+    .back-link {
+      text-align: center;
+      margin-top: 18px;
     }
-    .steps {
-      text-align: left;
-      background: #111;
-      border: 1px solid #2a2a2a;
-      border-radius: 10px;
-      padding: 1.4rem 2rem;
-      max-width: 480px;
-      width: 100%;
+    .back-link button { background: none; border: none; color: #888; cursor: pointer; font-size: 0.9rem; text-decoration: underline; }
+    .back-link button:hover { color: #ccc; }
+
+    @media (max-width: 540px) {
+      .card { padding: 24px 18px; }
+      h1 { font-size: 2rem; }
+      .word-grid { grid-template-columns: repeat(2, 1fr); }
     }
-    .steps li { margin-bottom: 0.5rem; }
-    .steps li span { color: #c9a84c; font-weight: bold; }
   </style>
 </head>
 <body>
+<div class="container">
 
-  <h1>🕌 Haram or Not?</h1>
-  <p>
-    A two-player word guessing game. One player secretly picks a <strong>haram</strong> word,
-    the other asks yes/no questions to figure it out. First to guess correctly wins.
-  </p>
-
-  <div class="badge">
-    <strong>Terminal / CLI Game</strong> &nbsp;·&nbsp; Node.js &nbsp;·&nbsp; No API key required
+  <!-- ══ MENU SCREEN ══ -->
+  <div id="screen-menu" class="screen active">
+    <div class="card">
+      <h1>🕌 Haram or Not?</h1>
+      <p class="subtitle">A word-guessing game — ask yes/no questions to figure out the haram word</p>
+      <button class="menu-btn primary" onclick="startGame()">▶ &nbsp; Player vs Computer</button>
+      <button class="menu-btn disabled-btn" disabled>🔒 &nbsp; Player vs Player &nbsp;(Coming Soon)</button>
+    </div>
   </div>
 
-  <ol class="steps">
-    <li><span>1.</span> Clone the repo if you haven't already</li>
-    <li><span>2.</span> Open a terminal in the project folder</li>
-    <li><span>3.</span> Run:</li>
-  </ol>
+  <!-- ══ WORD PICKER ══ -->
+  <div id="screen-pick" class="screen">
+    <div class="card">
+      <h1 style="font-size:1.7rem; margin-bottom:4px;">Choose Your Secret Word</h1>
+      <p class="subtitle">The computer won't know your choice — pick one from the list below</p>
+      <div id="word-grid" class="word-grid"></div>
+      <button class="btn btn-gold" style="width:100%; padding:16px; font-size:1rem;" onclick="confirmWord()">Confirm Word →</button>
+    </div>
+  </div>
 
-  <br>
-  <code>cd Games/haram-guesser</code><br>
-  <code>npm install</code><br>
-  <code>npm start</code>
+  <!-- ══ GAME SCREEN ══ -->
+  <div id="screen-game" class="screen">
+    <div class="card">
+      <div class="game-header">
+        <div>
+          <h1 style="font-size:1.5rem; margin-bottom:0;">🕌 Haram or Not?</h1>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <span id="turn-badge" class="turn-badge you">Your Turn</span>
+          <span id="round-badge" class="round-badge">Round 1</span>
+        </div>
+      </div>
 
-  <br><br>
-  <p style="font-size:0.85rem; color:#555;">
-    Player vs Computer fully playable &nbsp;·&nbsp; Player vs Player coming soon
-  </p>
+      <!-- Game log -->
+      <section class="section-title">Question & Answer Log</section>
+      <div id="log-box" class="log-box">
+        <div class="log-empty">No questions asked yet — you go first!</div>
+      </div>
 
+      <!-- CPU overlay — shown during CPU turn for player to answer -->
+      <div id="cpu-overlay" class="cpu-overlay">
+        <p>💭 Computer asks:</p>
+        <div id="cpu-question-text" class="q-display"></div>
+        <div class="answer-btns">
+          <button class="ans-btn yes"       onclick="answerCPU('Yes')">Yes</button>
+          <button class="ans-btn no"        onclick="answerCPU('No')">No</button>
+          <button class="ans-btn sometimes" onclick="answerCPU('Sometimes')">Sometimes</button>
+        </div>
+      </div>
+
+      <!-- Player input area -->
+      <div id="player-input-area" class="input-area">
+        <section class="section-title">Ask a yes/no question</section>
+        <div class="input-row">
+          <input id="q-input" type="text" placeholder="e.g. Is it something you eat?" maxlength="120"
+            onkeydown="if(event.key==='Enter') submitQuestion()">
+          <button class="btn btn-gold" onclick="submitQuestion()">Ask</button>
+        </div>
+        <section class="section-title" style="margin-top:14px;">Or guess the word outright</section>
+        <div class="guess-row">
+          <select id="guess-select"></select>
+          <button class="btn btn-red" onclick="submitGuess()">Guess!</button>
+        </div>
+        <p class="hint-text" style="margin-top:10px;">Correct guess wins immediately · Wrong guess costs your turn</p>
+      </div>
+
+      <!-- CPU taking turn msg -->
+      <div id="cpu-thinking" style="display:none; text-align:center; padding:18px; color:#fb923c;">
+        ⏳ Computer is thinking…
+      </div>
+
+      <div class="back-link"><button onclick="goMenu()">← Back to Menu</button></div>
+    </div>
+  </div>
+
+  <!-- ══ END SCREEN ══ -->
+  <div id="screen-end" class="screen">
+    <div class="card">
+      <div id="end-icon" class="end-icon"></div>
+      <div id="end-title" class="end-title"></div>
+      <div id="end-subtitle" style="text-align:center; color:#aaa; margin-bottom:4px;"></div>
+      <div class="reveal-box" id="reveal-box"></div>
+      <button class="menu-btn primary" onclick="startGame()">Play Again</button>
+      <div class="back-link"><button onclick="goMenu()">← Main Menu</button></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  WORD DATA
+// ═══════════════════════════════════════════════════════
+const WORDS = {
+  "pork":           { cat:"food",          isFood:true,  isDrink:false, isFinancial:false, isSpeech:false, isWorship:false, isEntertainment:false, isBody:false, isAnimal:true,  isIntoxicant:false, isObject:true,  isAction:false, isAbstract:false, isDeception:false, isOccult:false, isMeatType:true,  isMenOnly:false },
+  "alcohol":        { cat:"food",          isFood:false, isDrink:true,  isFinancial:false, isSpeech:false, isWorship:false, isEntertainment:false, isBody:false, isAnimal:false, isIntoxicant:true,  isObject:true,  isAction:false, isAbstract:false, isDeception:false, isOccult:false, isMeatType:false, isMenOnly:false },
+  "drugs":          { cat:"food",          isFood:false, isDrink:false, isFinancial:false, isSpeech:false, isWorship:false, isEntertainment:false, isBody:false, isAnimal:false, isIntoxicant:true,  isObject:true,  isAction:false, isAbstract:false, isDeception:false, isOccult:false, isMeatType:false, isMenOnly:false },
+  "blood":          { cat:"food",          isFood:false, isDrink:false, isFinancial:false, isSpeech:false, isWorship:false, isEntertainment:false, isBody:true,  isAnimal:false, isIntoxicant:false, isObject:true,  isAction:false, isAbstract:false, isDeception:false, isOccult:false, isMeatType:false, isMenOnly:false },
+  "carrion":        { cat:"food",          isFood:true,  isDrink:false, isFinancial:false, isSpeech:false, isWorship:false, isEntertainment:false, isBody:false, isAnimal:true,  isIntoxicant:false, isObject:true,  isAction:false, isAbstract:false, isDeception:false, isOccult:false, isMeatType:true,  isMenOnly:false },
+  "donkey meat":    { cat:"food",          isFood:true,  isDrink:false, isFinancial:false, isSpeech:false, isWorship:false, isEntertainment:false, isBody:false, isAnimal:true,  isIntoxicant:false, isObject:true,  isAction:false, isAbstract:false, isDeception:false, isOccult:false, isMeatType:true,  isMenOnly:false },
+  "riba":           { cat:"financial",     isFood:false, isDrink:false, isFinancial:true,  isSpeech:false, isWorship:false, isEntertainment:false, isBody:false, isAnimal:false, isIntoxicant:false, isObject:false, isAction:true,  isAbstract:true,  isDeception:false, isOccult:false, isMeatType:false, isMenOnly:false },
+  "gambling":       { cat:"financial",     isFood:false, isDrink:false, isFinancial:true,  isSpeech:false, isWorship:false, isEntertainment:true,  isBody:false, isAnimal:false, isIntoxicant:false, isObject:false, isAction:true,  isAbstract:false, isDeception:false, isOccult:false, isMeatType:false, isMenOnly:false },
+  "bribery":        { cat:"financial",     isFood:false, isDrink:false, isFinancial:true,  isSpeech:false, isWorship:false, isEntertainment:false, isBody:false, isAnimal:false, isIntoxicant:false, isObject:false, isAction:true,  isAbstract:false, isDeception:true,  isOccult:false, isMeatType:false, isMenOnly:false },
+  "fraud":          { cat:"financial",     isFood:false, isDrink:false, isFinancial:true,  isSpeech:false, isWorship:false, isEntertainment:false, isBody:false, isAnimal:false, isIntoxicant:false, isObject:false, isAction:true,  isAbstract:true,  isDeception:true,  isOccult:false, isMeatType:false, isMenOnly:false },
+  "stealing":       { cat:"financial",     isFood:false, isDrink:false, isFinancial:true,  isSpeech:false, isWorship:false, isEntertainment:false, isBody:false, isAnimal:false, isIntoxicant:false, isObject:false, isAction:true,  isAbstract:false, isDeception:false, isOccult:false, isMeatType:false, isMenOnly:false },
+  "lying":          { cat:"speech",        isFood:false, isDrink:false, isFinancial:false, isSpeech:true,  isWorship:false, isEntertainment:false, isBody:false, isAnimal:false, isIntoxicant:false, isObject:false, isAction:true,  isAbstract:false, isDeception:true,  isOccult:false, isMeatType:false, isMenOnly:false },
+  "backbiting":     { cat:"speech",        isFood:false, isDrink:false, isFinancial:false, isSpeech:true,  isWorship:false, isEntertainment:false, isBody:false, isAnimal:false, isIntoxicant:false, isObject:false, isAction:true,  isAbstract:false, isDeception:false, isOccult:false, isMeatType:false, isMenOnly:false },
+  "slander":        { cat:"speech",        isFood:false, isDrink:false, isFinancial:false, isSpeech:true,  isWorship:false, isEntertainment:false, isBody:false, isAnimal:false, isIntoxicant:false, isObject:false, isAction:true,  isAbstract:true,  isDeception:true,  isOccult:false, isMeatType:false, isMenOnly:false },
+  "arrogance":      { cat:"speech",        isFood:false, isDrink:false, isFinancial:false, isSpeech:true,  isWorship:false, isEntertainment:false, isBody:false, isAnimal:false, isIntoxicant:false, isObject:false, isAction:false, isAbstract:true,  isDeception:false, isOccult:false, isMeatType:false, isMenOnly:false },
+  "shirk":          { cat:"worship",       isFood:false, isDrink:false, isFinancial:false, isSpeech:false, isWorship:true,  isEntertainment:false, isBody:false, isAnimal:false, isIntoxicant:false, isObject:false, isAction:true,  isAbstract:true,  isDeception:false, isOccult:false, isMeatType:false, isMenOnly:false },
+  "black magic":    { cat:"worship",       isFood:false, isDrink:false, isFinancial:false, isSpeech:false, isWorship:true,  isEntertainment:false, isBody:false, isAnimal:false, isIntoxicant:false, isObject:false, isAction:true,  isAbstract:false, isDeception:false, isOccult:true,  isMeatType:false, isMenOnly:false },
+  "astrology":      { cat:"worship",       isFood:false, isDrink:false, isFinancial:false, isSpeech:false, isWorship:true,  isEntertainment:true,  isBody:false, isAnimal:false, isIntoxicant:false, isObject:false, isAction:false, isAbstract:true,  isDeception:false, isOccult:true,  isMeatType:false, isMenOnly:false },
+  "fortune telling":{ cat:"worship",       isFood:false, isDrink:false, isFinancial:false, isSpeech:false, isWorship:true,  isEntertainment:false, isBody:false, isAnimal:false, isIntoxicant:false, isObject:false, isAction:true,  isAbstract:false, isDeception:false, isOccult:true,  isMeatType:false, isMenOnly:false },
+  "pornography":    { cat:"entertainment", isFood:false, isDrink:false, isFinancial:false, isSpeech:false, isWorship:false, isEntertainment:true,  isBody:true,  isAnimal:false, isIntoxicant:false, isObject:false, isAction:false, isAbstract:true,  isDeception:false, isOccult:false, isMeatType:false, isMenOnly:false },
+  "animal fighting":{ cat:"entertainment", isFood:false, isDrink:false, isFinancial:false, isSpeech:false, isWorship:false, isEntertainment:true,  isBody:false, isAnimal:true,  isIntoxicant:false, isObject:false, isAction:true,  isAbstract:false, isDeception:false, isOccult:false, isMeatType:false, isMenOnly:false },
+  "tattoos":        { cat:"body",          isFood:false, isDrink:false, isFinancial:false, isSpeech:false, isWorship:false, isEntertainment:false, isBody:true,  isAnimal:false, isIntoxicant:false, isObject:false, isAction:false, isAbstract:false, isDeception:false, isOccult:false, isMeatType:false, isMenOnly:false },
+  "silk":           { cat:"body",          isFood:false, isDrink:false, isFinancial:false, isSpeech:false, isWorship:false, isEntertainment:false, isBody:true,  isAnimal:true,  isIntoxicant:false, isObject:true,  isAction:false, isAbstract:false, isDeception:false, isOccult:false, isMeatType:false, isMenOnly:true  },
+  "gold":           { cat:"body",          isFood:false, isDrink:false, isFinancial:false, isSpeech:false, isWorship:false, isEntertainment:false, isBody:true,  isAnimal:false, isIntoxicant:false, isObject:true,  isAction:false, isAbstract:false, isDeception:false, isOccult:false, isMeatType:false, isMenOnly:true  },
+};
+const WORD_LIST = Object.keys(WORDS);
+const CAT_ORDER = ["food","financial","speech","worship","entertainment","body"];
+const CAT_LABELS = { food:"Food & Drink", financial:"Financial", speech:"Speech", worship:"Worship", entertainment:"Entertainment", body:"Body & Appearance" };
+
+// ═══════════════════════════════════════════════════════
+//  Q&A ENGINE
+// ═══════════════════════════════════════════════════════
+function answerQ(question, word) {
+  const p = WORDS[word];
+  const q = question.toLowerCase();
+  const has = (...kws) => kws.some(k => q.includes(k));
+
+  if (has('eat','food','edible','consume','ingest','swallow','meal'))
+    return p.isFood ? "Yes" : (p.isDrink ? "Sometimes" : "No");
+  if (has('drink','liquid','beverage'))
+    return p.isDrink ? "Yes" : (word==='blood' ? "Sometimes" : "No");
+  if (has('intoxicant','intoxicat','get high','get drunk','mind-alter','addictive'))
+    return p.isIntoxicant ? "Yes" : "No";
+  if (has('financial','money','econom','wealth','transaction','bank','interest','loan'))
+    return p.isFinancial ? "Yes" : "No";
+  if (has('speech','verbal','say','talk','tongue','mouth','words','spoken'))
+    return p.isSpeech ? "Yes" : "No";
+  if (has('worship','religion','aqeedah','belief','faith','spiritual','islamic belief'))
+    return p.isWorship ? "Yes" : "No";
+  if (has('entertain','fun','leisure','game','play','amusement','hobby'))
+    return p.isEntertainment ? "Yes" : "No";
+  if (has('body','skin','appear','wear','cloth','fabric','material','dress','worn','jewelry','ornament'))
+    return p.isBody ? "Yes" : "No";
+  if (has('physical object','tangible','hold','touch','pick up'))
+    return p.isObject ? "Yes" : "No";
+  if (has('action','act','doing','behavior','activity','practice','deed','something you do'))
+    return p.isAction ? "Yes" : "No";
+  if (has('abstract','concept','idea','invisible','intangible','not physical','cannot hold'))
+    return p.isAbstract ? "Yes" : "No";
+  if (has('animal','creature','beast','living creature','pet','zoo'))
+    return p.isAnimal ? "Yes" : "No";
+  if (has('men only','only for men','haram for men','male only','specific to men'))
+    return p.isMenOnly ? "Yes" : "No";
+  if (has('supernatural','occult','magic','spell','jinn','mystical'))
+    return p.isOccult ? "Yes" : "No";
+  if (has('deception','deceive','trick','dishonest','lie','false','mislead'))
+    return p.isDeception ? "Yes" : "No";
+  if (has('meat','flesh','slaughter','animal product'))
+    return p.isMeatType ? "Yes" : "No";
+  if (has('star','planet','zodiac','horoscope','celestial','sky','cosmos','constellation'))
+    return word==='astrology' ? "Yes" : "No";
+  if (has('future','predict','prophecy','divination','psychic','foretell'))
+    return ['fortune telling','astrology'].includes(word) ? "Yes" : "No";
+  if (has('pride','ego','arrogant','conceited','attitude','character trait','personality'))
+    return word==='arrogance' ? "Yes" : "No";
+  if (has('pig','swine','pork'))
+    return word==='pork' ? "Yes" : "No";
+  if (has('usury','interest','riba','lending','loan with interest'))
+    return word==='riba' ? "Yes" : "No";
+  if (has('ink','tattoo','permanent mark','mark on skin','body art'))
+    return word==='tattoos' ? "Yes" : "No";
+  if (has('sexual','explicit','nude','naked','adult content','lust'))
+    return word==='pornography' ? "Yes" : "No";
+  if (has('violence','fight','combat','harm','hurt','cruelty'))
+    return ['animal fighting','stealing','bribery'].includes(word) ? "Yes" : (word==='slander' ? "Sometimes" : "No");
+  if (has('theft','steal','rob','take without'))
+    return word==='stealing' ? "Yes" : "No";
+  if (has('precious metal','jewel','ring','necklace','bracelet','gold','silver'))
+    return word==='gold' ? "Yes" : "No";
+
+  // Category fallbacks
+  if (has('food category','food and drink category')) return p.cat==='food' ? "Yes" : "No";
+  if (has('financial category')) return p.cat==='financial' ? "Yes" : "No";
+  if (has('speech category')) return p.cat==='speech' ? "Yes" : "No";
+  if (has('worship category')) return p.cat==='worship' ? "Yes" : "No";
+  if (has('entertainment category')) return p.cat==='entertainment' ? "Yes" : "No";
+  if (has('body category','appearance category')) return p.cat==='body' ? "Yes" : "No";
+
+  return "Sometimes";
+}
+
+// ═══════════════════════════════════════════════════════
+//  COMPUTER AI
+// ═══════════════════════════════════════════════════════
+const QUESTION_BANK = [
+  { q:"Is it something you can eat or drink?",              f: w => WORDS[w].isFood || WORDS[w].isDrink },
+  { q:"Is it a physical object you can hold?",              f: w => WORDS[w].isObject },
+  { q:"Is it an action or behaviour?",                      f: w => WORDS[w].isAction },
+  { q:"Is it related to financial matters or money?",       f: w => WORDS[w].isFinancial },
+  { q:"Is it related to speech or what you say?",           f: w => WORDS[w].isSpeech },
+  { q:"Is it related to worship or Islamic belief?",        f: w => WORDS[w].isWorship },
+  { q:"Is it a form of entertainment?",                     f: w => WORDS[w].isEntertainment },
+  { q:"Is it related to the body or appearance?",           f: w => WORDS[w].isBody },
+  { q:"Does it involve an animal?",                         f: w => WORDS[w].isAnimal },
+  { q:"Is it an intoxicant?",                               f: w => WORDS[w].isIntoxicant },
+  { q:"Is it abstract — not a physical thing?",             f: w => WORDS[w].isAbstract },
+  { q:"Is it related to deception or dishonesty?",          f: w => WORDS[w].isDeception },
+  { q:"Is it related to the supernatural or occult?",       f: w => WORDS[w].isOccult },
+  { q:"Is it only haram specifically for men?",             f: w => WORDS[w].isMenOnly },
+  { q:"Is it a type of meat or animal flesh?",              f: w => WORDS[w].isMeatType },
+  { q:"Does it involve predicting the future?",             f: w => ['fortune telling','astrology'].includes(w) },
+  { q:"Is it related to stars, planets, or horoscopes?",   f: w => w==='astrology' },
+  { q:"Does it involve harming or taking from others?",     f: w => ['stealing','bribery','slander','animal fighting'].includes(w) },
+  { q:"Is it the gravest sin in Islam (associating partners with Allah)?", f: w => w==='shirk' },
+];
+
+let cpu = {
+  secretWord: null,
+  remaining: [],
+  asked: new Set(),
+  questionsSinceGuess: 0,
+
+  init() {
+    this.secretWord = WORD_LIST[Math.floor(Math.random() * WORD_LIST.length)];
+    this.remaining = [...WORD_LIST];
+    this.asked.clear();
+    this.questionsSinceGuess = 0;
+  },
+
+  takeTurn() {
+    this.questionsSinceGuess++;
+    if (this.questionsSinceGuess >= 3 && this.remaining.length <= 3) {
+      this.questionsSinceGuess = 0;
+      return { type:'guess', content: this.remaining[Math.floor(Math.random()*this.remaining.length)] };
+    }
+    const best = this._bestQuestion();
+    if (best) {
+      this.asked.add(best.q);
+      return { type:'question', content: best.q, filter: best.f };
+    }
+    this.questionsSinceGuess = 0;
+    return { type:'guess', content: this.remaining[Math.floor(Math.random()*this.remaining.length)] };
+  },
+
+  _bestQuestion() {
+    let bestQ = null, bestScore = -1;
+    for (const entry of QUESTION_BANK) {
+      if (this.asked.has(entry.q)) continue;
+      const yes = this.remaining.filter(entry.f).length;
+      const score = Math.min(yes, this.remaining.length - yes);
+      if (score > bestScore) { bestScore = score; bestQ = entry; }
+    }
+    return bestQ;
+  },
+
+  applyAnswer(filterFn, answer) {
+    const isYes = answer === 'Yes';
+    const isNo  = answer === 'No';
+    if (isYes) this.remaining = this.remaining.filter(filterFn);
+    else if (isNo) this.remaining = this.remaining.filter(w => !filterFn(w));
+  }
+};
+
+// ═══════════════════════════════════════════════════════
+//  GAME STATE
+// ═══════════════════════════════════════════════════════
+let playerWord = null;
+let turn = 'player';  // 'player' | 'cpu'
+let round = 1;
+let log = [];
+let pendingCPUAction = null;
+
+// ═══════════════════════════════════════════════════════
+//  SCREEN HELPERS
+// ═══════════════════════════════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function goMenu() {
+  showScreen('screen-menu');
+}
+
+// ═══════════════════════════════════════════════════════
+//  MENU → WORD PICKER
+// ═══════════════════════════════════════════════════════
+function startGame() {
+  playerWord = null;
+  buildWordGrid();
+  showScreen('screen-pick');
+}
+
+function buildWordGrid() {
+  const grid = document.getElementById('word-grid');
+  grid.innerHTML = '';
+  for (const cat of CAT_ORDER) {
+    const words = WORD_LIST.filter(w => WORDS[w].cat === cat);
+    const label = document.createElement('div');
+    label.className = 'cat-label';
+    label.style.gridColumn = '1/-1';
+    label.textContent = CAT_LABELS[cat];
+    grid.appendChild(label);
+    for (const w of words) {
+      const chip = document.createElement('div');
+      chip.className = 'word-chip';
+      chip.textContent = w;
+      chip.dataset.word = w;
+      chip.onclick = () => selectWord(chip, w);
+      grid.appendChild(chip);
+    }
+  }
+}
+
+function selectWord(chip, word) {
+  document.querySelectorAll('.word-chip').forEach(c => c.classList.remove('selected'));
+  chip.classList.add('selected');
+  playerWord = word;
+}
+
+function confirmWord() {
+  if (!playerWord) { alert('Please select a word first!'); return; }
+  initGameScreen();
+  showScreen('screen-game');
+}
+
+// ═══════════════════════════════════════════════════════
+//  GAME SCREEN SETUP
+// ═══════════════════════════════════════════════════════
+function initGameScreen() {
+  cpu.init();
+  turn = 'player';
+  round = 1;
+  log = [];
+  pendingCPUAction = null;
+
+  // Build guess dropdown
+  const sel = document.getElementById('guess-select');
+  sel.innerHTML = WORD_LIST.map(w => `<option value="${w}">${w}</option>`).join('');
+
+  renderLog();
+  updateHeader();
+  showPlayerInput(true);
+  document.getElementById('cpu-overlay').classList.remove('active');
+  document.getElementById('cpu-thinking').style.display = 'none';
+}
+
+function updateHeader() {
+  const badge = document.getElementById('turn-badge');
+  badge.textContent = turn === 'player' ? 'Your Turn' : "Computer's Turn";
+  badge.className = 'turn-badge ' + (turn === 'player' ? 'you' : 'cpu');
+  document.getElementById('round-badge').textContent = `Round ${round}`;
+}
+
+function showPlayerInput(show) {
+  document.getElementById('player-input-area').style.display = show ? 'block' : 'none';
+}
+
+// ═══════════════════════════════════════════════════════
+//  LOG
+// ═══════════════════════════════════════════════════════
+function renderLog() {
+  const box = document.getElementById('log-box');
+  if (log.length === 0) {
+    box.innerHTML = '<div class="log-empty">No questions asked yet — you go first!</div>';
+    return;
+  }
+  box.innerHTML = log.map(e => {
+    const whoClass = e.who === 'you' ? 'who-you' : 'who-cpu';
+    const whoLabel = e.who === 'you' ? 'YOU' : 'CPU';
+    if (e.type === 'question') {
+      return `<div class="log-entry">
+        <span class="${whoClass}">${whoLabel}</span>
+        <span class="q-text"> asked: "${e.q}"</span><br>
+        &nbsp;&nbsp;↳ <span class="answer">${e.answer}</span>
+      </div>`;
+    } else {
+      return `<div class="log-entry">
+        <span class="${whoClass}">${whoLabel}</span>
+        <span class="guess-text"> guessed: <strong>${e.guess}</strong></span>
+        ${e.correct ? ' ✅' : ' ❌'}
+      </div>`;
+    }
+  }).join('');
+  box.scrollTop = box.scrollHeight;
+}
+
+// ═══════════════════════════════════════════════════════
+//  PLAYER ACTIONS
+// ═══════════════════════════════════════════════════════
+function submitQuestion() {
+  const input = document.getElementById('q-input');
+  const q = input.value.trim();
+  if (!q) return;
+  input.value = '';
+
+  const answer = answerQ(q, cpu.secretWord);
+  log.push({ who:'you', type:'question', q, answer });
+  renderLog();
+  endPlayerTurn();
+}
+
+function submitGuess() {
+  const guess = document.getElementById('guess-select').value;
+  const correct = guess === cpu.secretWord;
+  log.push({ who:'you', type:'guess', guess, correct });
+  renderLog();
+
+  if (correct) {
+    endGame('player');
+    return;
+  }
+  endPlayerTurn();
+}
+
+function endPlayerTurn() {
+  turn = 'cpu';
+  updateHeader();
+  showPlayerInput(false);
+  setTimeout(doCPUTurn, 600);
+}
+
+// ═══════════════════════════════════════════════════════
+//  CPU TURN
+// ═══════════════════════════════════════════════════════
+function doCPUTurn() {
+  document.getElementById('cpu-thinking').style.display = 'block';
+
+  setTimeout(() => {
+    document.getElementById('cpu-thinking').style.display = 'none';
+    const action = cpu.takeTurn();
+    pendingCPUAction = action;
+
+    if (action.type === 'question') {
+      document.getElementById('cpu-question-text').textContent = `"${action.content}"`;
+      document.getElementById('cpu-overlay').classList.add('active');
+    } else {
+      // CPU guesses
+      const correct = action.content === playerWord;
+      log.push({ who:'cpu', type:'guess', guess: action.content, correct });
+      renderLog();
+
+      if (correct) {
+        endGame('cpu');
+        return;
+      }
+      endCPUTurn();
+    }
+  }, 900);
+}
+
+function answerCPU(answer) {
+  if (!pendingCPUAction) return;
+  document.getElementById('cpu-overlay').classList.remove('active');
+
+  // Apply to AI elimination
+  cpu.applyAnswer(pendingCPUAction.filter, answer);
+
+  log.push({ who:'cpu', type:'question', q: pendingCPUAction.content, answer });
+  renderLog();
+  pendingCPUAction = null;
+  endCPUTurn();
+}
+
+function endCPUTurn() {
+  turn = 'player';
+  round++;
+  updateHeader();
+  showPlayerInput(true);
+}
+
+// ═══════════════════════════════════════════════════════
+//  END GAME
+// ═══════════════════════════════════════════════════════
+function endGame(winner) {
+  showScreen('screen-end');
+  const playerWon = winner === 'player';
+
+  document.getElementById('end-icon').textContent  = playerWon ? '🎉' : '😔';
+  const titleEl = document.getElementById('end-title');
+  titleEl.textContent = playerWon ? 'You Win! Mashallah!' : 'Computer Wins!';
+  titleEl.className = 'end-title ' + (playerWon ? 'win' : 'lose');
+  document.getElementById('end-subtitle').textContent =
+    playerWon ? 'You figured out the haram word!' : 'Astaghfirullah — the computer got you!';
+
+  document.getElementById('reveal-box').innerHTML = `
+    <div class="reveal-row"><span class="reveal-label">Your secret word</span><span class="reveal-val">${playerWord}</span></div>
+    <div class="reveal-row"><span class="reveal-label">Computer's secret word</span><span class="reveal-val">${cpu.secretWord}</span></div>
+    <div class="reveal-row"><span class="reveal-label">Rounds played</span><span class="reveal-val">${round}</span></div>
+    <div class="reveal-row"><span class="reveal-label">Questions asked (total)</span><span class="reveal-val">${log.filter(e=>e.type==='question').length}</span></div>
+  `;
+}
+</script>
 </body>
 </html>
