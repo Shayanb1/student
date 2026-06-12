@@ -779,7 +779,7 @@ function hgAnswer(question, word) {
 const HG_QB = [
   { q:"Is it something you can eat or drink?",             f:w=>HG_WORDS[w].isFood||HG_WORDS[w].isDrink },
   { q:"Is it a physical object you can hold?",             f:w=>HG_WORDS[w].isObject },
-  { q:"Is it an action or behaviour?",                     f:w=>HG_WORDS[w].isAction },
+  { q:"Is it something you do — an action?",                f:w=>HG_WORDS[w].isAction },
   { q:"Is it related to financial matters?",               f:w=>HG_WORDS[w].isFinancial },
   { q:"Is it related to speech or what you say?",          f:w=>HG_WORDS[w].isSpeech },
   { q:"Is it related to worship or Islamic belief?",       f:w=>HG_WORDS[w].isWorship },
