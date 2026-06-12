@@ -298,37 +298,54 @@ permalink: /haram-guesser/
     justify-content: center;
   }
 
-  /* Game screen */
+  /* ── Game screen ── */
   #hg-game .hg-card {
     overflow: hidden;
+    padding: 24px 36px 28px;   /* restore breathing room */
   }
   .hg-game-card {
     display: flex;
     flex-direction: column;
+    gap: 16px;
+  }
+  .hg-header {
+    flex-shrink: 0;
   }
   .hg-game-cols {
     flex: 1;
     display: flex;
-    gap: 24px;
+    gap: 28px;
     min-height: 0;
     overflow: hidden;
   }
 
   /* LEFT column — chat */
   .hg-game-left {
-    flex: 1.15;
+    flex: 1.1;
     display: flex;
     flex-direction: column;
+    gap: 12px;
     min-height: 0;
     border-right: 1px solid rgba(255,255,255,0.08);
-    padding-right: 24px;
+    padding-right: 28px;
   }
+  /* Log takes ~55% of left column height, never more */
+  .hg-game-left .hg-log {
+    flex: 1;
+    min-height: 60px;
+    max-height: 55%;
+  }
+  /* Input area never shrinks */
+  #hg-player-area { flex-shrink: 0; }
+  #hg-cpu-thinking { flex-shrink: 0; }
+  #hg-cpu-overlay { flex-shrink: 0; }
 
   /* RIGHT column — word details */
   .hg-game-right {
-    flex: 0.85;
+    flex: 0.9;
     display: flex;
     flex-direction: column;
+    gap: 8px;
     min-height: 0;
     overflow-y: auto;
   }
