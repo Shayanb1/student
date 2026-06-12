@@ -314,6 +314,8 @@ permalink: /haram-guesser/
   .hg-cpu-overlay p { color:#fb923c; font-weight:600; margin-bottom:6px; }
   .hg-cpu-q { color:#eee; font-style:italic; margin-bottom:12px; font-size:0.95rem; }
   .hg-ans-btns { display:flex; gap:8px; flex-wrap:wrap; }
+  .hg-som       { background:rgba(250,204,21,.12); color:#facc15; border:1px solid #facc15; }
+  .hg-som:hover { background:rgba(250,204,21,.28); }
   .hg-ans-btn {
     padding:9px 18px; border-radius:8px; border:none;
     font-weight:700; cursor:pointer; font-size:0.88rem; transition:all .2s;
@@ -574,6 +576,7 @@ permalink: /haram-guesser/
               <div class="hg-ans-btns">
                 <button class="hg-ans-btn hg-yes" onclick="hgAnswerCPU('Yes')">Yes</button>
                 <button class="hg-ans-btn hg-no"  onclick="hgAnswerCPU('No')">No</button>
+                <button class="hg-ans-btn hg-som" onclick="hgAnswerCPU('Sometimes')">Sometimes</button>
               </div>
             </div>
 
@@ -697,9 +700,9 @@ function hgAnswer(question, word) {
   const has = (...kws) => kws.some(k => q.includes(k));
 
   if (has('eat','food','edible','consume','ingest','swallow','meal'))
-    return p.isFood ? "Yes" : "No";
+    return p.isFood ? "Yes" : (p.isDrink ? "Sometimes" : "No");
   if (has('drink','liquid','beverage'))
-    return p.isDrink ? "Yes" : "No";
+    return p.isDrink ? "Yes" : (word==='blood' ? "Sometimes" : "No");
   if (has('intoxicant','intoxicat','get high','get drunk','mind-alter','addictive'))
     return p.isIntoxicant ? "Yes" : "No";
   if (has('financial','money','econom','wealth','transaction','bank'))
@@ -739,7 +742,7 @@ function hgAnswer(question, word) {
   if (has('ink','tattoo','permanent mark','body art'))  return word==='tattoos' ? "Yes" : "No";
   if (has('sexual','explicit','nude','naked','adult content','lust')) return word==='pornography' ? "Yes" : "No";
   if (has('violence','fight','combat','cruelty'))
-    return ['animal fighting','stealing','bribery','hurting yourself','suicide'].includes(word) ? "Yes" : "No";
+    return ['animal fighting','stealing','bribery','hurting yourself','suicide'].includes(word) ? "Yes" : (word==='slander' ? "Sometimes" : "No");
   if (has('harm yourself','self-harm','self harm','hurt yourself','hurting yourself'))
     return p.isSelfHarm ? "Yes" : "No";
   if (has('self','yourself','your own body','your own life'))
@@ -747,7 +750,7 @@ function hgAnswer(question, word) {
   if (has('theft','steal','rob','take without')) return word==='stealing' ? "Yes" : "No";
   if (has('precious metal','jewel','ring','necklace','bracelet','gold'))  return word==='gold' ? "Yes" : "No";
   if (has('music','song','sound','audio','instrument','tune','melody'))   return word==='music' ? "Yes" : "No";
-  if (has('spend','waste','money','extravagan','israf'))  return ['wasting money','riba','gambling','price fixing','dirty money','selling bad stuff'].includes(word) ? "Yes" : "No";
+  if (has('spend','waste','money','extravagan','israf'))  return ['wasting money','riba','gambling','price fixing','dirty money','selling bad stuff'].includes(word) ? "Yes" : "Sometimes";
   if (has('gossip','rumour','rumor','tale','spreading'))  return ['spreading gossip','backbiting'].includes(word) ? "Yes" : "No";
   if (has('curse','swear','insult'))  return word==='cursing' ? "Yes" : "No";
   if (has('mockery','mock','make fun','ridicule','istihza'))  return word==='making fun' ? "Yes" : "No";
@@ -764,10 +767,10 @@ function hgAnswer(question, word) {
   if (has('price','market','supply','monopol','ihtikar'))  return word==='price fixing' ? "Yes" : "No";
   if (has('laundering','dirty','illegal money','haram money'))  return word==='dirty money' ? "Yes" : "No";
   if (has('sell','selling','trade','commerce','merchandise'))
-    return ['selling bad stuff','riba','fraud','bribery'].includes(word) ? "Yes" : "No";
+    return ['selling bad stuff','riba','fraud','bribery'].includes(word) ? "Yes" : "Sometimes";
   if (has('predator','claws','fangs','lion','tiger','wolf'))  return word==='predator meat' ? "Yes" : "No";
   if (has('bird','eagle','hawk','falcon','bird of prey'))  return word==='eagle meat' ? "Yes" : "No";
-  return "No";
+  return "Sometimes";
 }
 
 // ═══════════════════════════════════════
