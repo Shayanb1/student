@@ -495,6 +495,37 @@ permalink: /haram-guesser/
     line-height: 1.6;
   }
   .hg-wp-hint strong { color: #c9a84c; }
+  .hg-wp-bullets {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .hg-wp-bullets li {
+    font-size: 0.84rem;
+    color: #ccc;
+    line-height: 1.45;
+    padding-left: 16px;
+    position: relative;
+  }
+  .hg-wp-bullets li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: #c9a84c;
+    font-weight: 700;
+  }
+  .hg-wp-example {
+    background: rgba(201,168,76,0.06);
+    border: 1px solid rgba(201,168,76,0.18);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.82rem;
+    color: #bbb;
+    line-height: 1.5;
+    font-style: italic;
+  }
+  .hg-wp-example strong { color: #c9a84c; font-style: normal; }
   .hg-wp-divider {
     font-size: 0.7rem;
     font-weight: 700;
@@ -1022,6 +1053,55 @@ const HG_WORD_DESC = {
   "starving yourself":         "Intentionally starving oneself to harm the body is haram. The body has a right over you. Extreme fasting that endangers health is also forbidden.",
 };
 
+const HG_WORD_INFO = {
+  "pork":                      { bullets:["Meat from pigs in any form","Includes bacon, ham, lard, gelatin","Even trace amounts make food haram"], example:"Eating a pepperoni pizza or a BLT sandwich" },
+  "alcohol":                   { bullets:["Fermented or distilled drink that intoxicates","Includes wine, beer, spirits, sake","Even a small sip is haram — no minimum threshold"], example:"Drinking a glass of wine at dinner or a beer at a party" },
+  "drugs":                     { bullets:["Narcotics and recreational substances","Includes marijuana, cocaine, heroin, khat","Prescription drug abuse also falls under this"], example:"Smoking weed or taking ecstasy at a party" },
+  "muskir":                    { bullets:["Any substance that causes intoxication","Broader ruling than just named drugs","Synthetic drugs and new substances included"], example:"Consuming any mind-altering substance even if it's 'legal'" },
+  "blood":                     { bullets:["Flowing blood of any animal or human","Includes black pudding and blood sausage","Meat must be properly drained of blood"], example:"Drinking blood or eating blood pudding (black pudding)" },
+  "carrion":                   { bullets:["Animal that died without Islamic slaughter","Includes roadkill, drowned or strangled animals","Must say Bismillah and cut the throat"], example:"Eating meat from an animal that died of disease or old age" },
+  "donkey meat":               { bullets:["Meat from domestic donkeys","Forbidden since the battle of Khaybar","Wild donkeys are a separate ruling"], example:"Eating a dish made from donkey meat" },
+  "predator meat":             { bullets:["Animals with fangs that hunt other animals","Lions, wolves, tigers, dogs, cats","The fang or talon rule applies universally"], example:"Eating lion steak or wolf jerky" },
+  "eagle meat":                { bullets:["Birds with talons that hunt prey","Eagles, falcons, hawks, vultures","Any bird of prey is haram to eat"], example:"Eating eagle wings or falcon meat" },
+  "riba":                      { bullets:["Charging or paying interest on a loan","Applies to mortgages, credit cards, and loans","Any guaranteed excess above the principal is riba"], example:"Taking a bank mortgage with a 6% interest rate" },
+  "gambling":                  { bullets:["Betting money on chance outcomes","Includes poker, lottery, sports betting, slots","The uncertainty (gharar) and addiction are the harms"], example:"Buying lottery tickets or betting £50 on a football match" },
+  "bribery":                   { bullets:["Paying or receiving money to corrupt justice","Both the giver and taker are equally cursed","Includes bribing officials, judges, or police"], example:"Paying a judge to rule in your favour or bribing to pass a test" },
+  "fraud":                     { bullets:["Deliberate deception for financial gain","Misrepresenting goods, scales, or services","Covers scams, false advertising, and cheating"], example:"Selling fake designer bags as the real thing" },
+  "stealing":                  { bullets:["Taking someone's property without permission","Includes theft, pickpocketing, and shoplifting","One of the hudud crimes in Islamic law"], example:"Shoplifting from a store or stealing someone's phone" },
+  "price fixing":              { bullets:["Hoarding to create artificial shortages","Monopolising essential goods to inflate prices","Condemned as causing harm to the marketplace"], example:"Buying all the flour before Ramadan to resell at triple the price" },
+  "dirty money":               { bullets:["Money earned through haram means","Cannot be kept, gifted, or donated","Using it spreads the haram to others"], example:"Using drug dealing money to buy food or give as a gift" },
+  "selling bad stuff":         { bullets:["Trading in items that are haram","Alcohol, drugs, weapons for oppressors","The seller shares in every sin committed with what they sold"], example:"Running a liquor store or selling drugs" },
+  "lying":                     { bullets:["Saying something you know to be false","One of the signs of hypocrisy (nifaq)","Includes lying to avoid trouble or to impress"], example:"Telling your boss you were sick when you simply didn't want to go" },
+  "backbiting":                { bullets:["Mentioning someone's real faults behind their back","It is still haram even if what you say is true","Different from slander — slander is false, this is true but private"], example:"Telling friends 'you know how lazy Ahmed is?' while he's not there" },
+  "slander":                   { bullets:["Making up false things about a person","Worse than backbiting because it's fabricated","Can destroy a person's reputation and life"], example:"Telling people that someone stole something when they did not" },
+  "arrogance":                 { bullets:["Believing you are better than others","Refusing the truth out of pride","Even a mustard seed of kibr blocks Paradise"], example:"Refusing to sit with 'lower-class' people or constantly bragging" },
+  "making fun":                { bullets:["Mocking others for appearance, faith, or status","Includes online trolling and bullying","Even joking can cross this line if it belittles"], example:"Laughing at someone's accent or mocking how they dress" },
+  "cursing":                   { bullets:["Invoking Allah's curse on a Muslim","Swearing at or about believers","Even cursing animals without reason is condemned"], example:"Saying 'la'natullah alayk' to a fellow Muslim out of anger" },
+  "lying under oath":          { bullets:["Swearing falsely by Allah deliberately","Called al-Ghamus — the drowning oath","Destroys the swearer in sin and hellfire"], example:"Swearing by Allah in court that you didn't do something when you did" },
+  "spreading gossip":          { bullets:["Carrying tales between people to start conflict","Includes forwarding rumours and screenshots","Breaks friendships and creates hatred"], example:"Telling Person A exactly what Person B said about them to cause a fight" },
+  "shirk":                     { bullets:["Associating partners with Allah","The only sin Allah does not forgive if died upon","Includes praying to saints, idols, or the dead"], example:"Saying 'Ya Ali, help me!' as a supplication instead of to Allah" },
+  "black magic":               { bullets:["Casting spells to harm or control others","Uses jinn and demonic forces","The practitioner commits kufr (disbelief)"], example:"Paying a witch doctor to make someone fall in love with you" },
+  "astrology":                 { bullets:["Believing stars control your fate or personality","Reading horoscopes and acting on them","Even 'just for fun' belief crosses the line"], example:"Checking your horoscope and changing plans because 'Mercury is in retrograde'" },
+  "fortune telling":           { bullets:["Claiming to know the unseen (ghayb)","Visiting psychics, palm readers, or tarot card readers","Believing them invalidates 40 days of prayer"], example:"Going to a fortune teller to ask if your relationship will work out" },
+  "praying to graves":         { bullets:["Calling on the dead to intercede or help","Visiting shrines to make du'a to the deceased","This is major shirk — the dead cannot benefit or harm"], example:"Asking a saint's grave to cure your illness or grant your wish" },
+  "jealousy":                  { bullets:["Wishing for someone's blessing to be taken away","Different from envy of achievement (ghib-tah) which is allowed","Hasad burns good deeds like fire burns wood"], example:"Wishing your friend's business fails because you feel left behind" },
+  "making up religion":        { bullets:["Inventing new acts of worship without basis","Adding rituals, holidays, or rules not in Quran or Sunnah","Every innovation (bid'ah) is misguidance"], example:"Celebrating the Prophet's birthday as a mandatory religious act" },
+  "pornography":               { bullets:["Explicit sexual content of any kind","Watching, making, sharing, or saving it","Corrupts the heart and leads toward zina"], example:"Watching explicit videos online" },
+  "animal fighting":           { bullets:["Forcing animals to fight each other","Cockfighting, dogfighting, bullfighting","Cruelty and betting both make it doubly haram"], example:"Attending or organising a cockfight" },
+  "music":                     { bullets:["Songs with lewd, sinful, or kufr lyrics","Instruments used for frivolity and sins","Most scholars restrict it; some permit nasheeds without instruments"], example:"Listening to explicit trap music or songs that glorify haram" },
+  "wasting money":             { bullets:["Spending recklessly on luxury and show","Destroying food, clothing, or wealth carelessly","Wealth is a trust (amanah) not yours to waste"], example:"Buying 10 expensive watches you never wear just to flex" },
+  "pointless games":           { bullets:["Idle entertainment that keeps you from salah","Excessive gaming, social media, or TV","Anything that replaces dhikr with distraction"], example:"Staying up until fajr playing games and missing the prayer" },
+  "tattoos":                   { bullets:["Permanent ink injected under the skin","Haram in all four madhabs","The tattooer and the tattooed are both cursed in hadith"], example:"Getting a sleeve tattoo or a name tattooed on your wrist" },
+  "silk":                      { bullets:["Pure silk fabric is haram for men to wear","Silk shirts, ties, and blended fabrics","Women may wear it freely — it is a gender-specific ruling"], example:"A man wearing a silk dress shirt to a wedding" },
+  "gold":                      { bullets:["Gold jewellery is haram for men","Rings, chains, bracelets, and watches","Women may wear gold — again a gender-specific ruling"], example:"A man wearing a gold chain or a gold signet ring" },
+  "shaping eyebrows":          { bullets:["Plucking, threading, or shaving eyebrows","Altering the natural shape Allah gave you","The one who does it and the one who asks are both cursed"], example:"Getting your eyebrows threaded into a thin arch" },
+  "wearing a cross":           { bullets:["Displaying the Christian cross symbol","Even worn as fashion, not sincere belief","Symbol of a theological claim Islam explicitly rejects"], example:"Wearing a cross necklace as a fashion accessory" },
+  "dressing as opposite gender":{ bullets:["Men wearing women's clothes or vice versa","Includes mannerisms, accessories, and speech patterns","Gender distinction is part of the natural disposition (fitra)"], example:"A man dressing, walking, and acting in a feminine manner" },
+  "suicide":                   { bullets:["Taking your own life intentionally","Quran 4:29 explicitly forbids it","Even in terminal illness — life belongs only to Allah"], example:"Ending your life because of depression, debt, or hardship" },
+  "hurting yourself":          { bullets:["Deliberately injuring your own body","Cutting, burning, or hitting yourself","The body is an amanah (trust) — not yours to destroy"], example:"Cutting your arms to cope with emotional pain" },
+  "starving yourself":         { bullets:["Deliberately refusing to eat to harm the body","Extreme dieting that endangers health","Even excessive voluntary fasting that harms is condemned"], example:"Refusing all food for days on purpose to punish yourself" },
+};
+
 function hgBuildWordPanel(word) {
   const p = HG_WORDS[word];
   const panel = document.getElementById('hg-word-panel');
@@ -1030,6 +1110,7 @@ function hgBuildWordPanel(word) {
   const english = parts.slice(1).join('/');
   const catLabel = HG_CATS[p.cat] || p.cat;
   const desc = HG_WORD_DESC[word] || 'This word is forbidden in Islam.';
+  const info = HG_WORD_INFO[word] || { bullets:[], example:'' };
 
   // Build tags from properties
   const tagDefs = [
@@ -1074,6 +1155,20 @@ function hgBuildWordPanel(word) {
         ${activeTags.length === 0 ? '<span class="hg-tag">General Prohibition</span>' : ''}
       </div>
     </div>
+
+    ${info.bullets.length ? `
+    <div>
+      <div class="hg-wp-divider">What it is</div>
+      <ul class="hg-wp-bullets">
+        ${info.bullets.map(b=>`<li>${b}</li>`).join('')}
+      </ul>
+    </div>` : ''}
+
+    ${info.example ? `
+    <div>
+      <div class="hg-wp-divider">Example</div>
+      <div class="hg-wp-example">${info.example}</div>
+    </div>` : ''}
 
     <div>
       <div class="hg-wp-divider">Why it\'s Haram</div>
