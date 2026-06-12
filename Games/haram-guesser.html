@@ -258,8 +258,7 @@ permalink: /haram-guesser/
 
   /* ── Input area — centered, compact ── */
   .hg-input-area-inner {
-    width: 520px;
-    max-width: 100%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -411,7 +410,7 @@ permalink: /haram-guesser/
   /* CPU overlay centered */
   .hg-game-left .hg-cpu-overlay { width: 100%; }
   /* Input area never shrinks, full width of column */
-  #hg-player-area { flex-shrink: 0; width: 100%; display: flex; justify-content: center; padding: 0 32px; }
+  #hg-player-area { flex-shrink: 0; width: 100%; max-width: 580px; }
   #hg-cpu-thinking { flex-shrink: 0; }
   #hg-cpu-overlay  { flex-shrink: 0; }
 
