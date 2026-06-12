@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Haram or Not?
+title: Guess the Haram
 permalink: /haram-guesser/
 ---
 
@@ -170,26 +170,45 @@ permalink: /haram-guesser/
   .hg-badge.cpu { background:rgba(251,146,60,.12); color:#fb923c; border:1px solid #fb923c; }
   .hg-round    { padding:6px 14px; border-radius:20px; background:rgba(255,255,255,.08); font-size:0.85rem; color:#aaa; }
 
-  /* ── Log — grows to fill available space ── */
+  /* ── Log — chat bubble style ── */
   .hg-log {
-    background: rgba(0,0,0,.3);
-    border: 1px solid rgba(255,255,255,.08);
-    border-radius: 10px;
-    padding: 12px 14px;
     flex: 1;
     min-height: 80px;
+    max-height: 55%;
     overflow-y: auto;
-    margin-bottom: 14px;
-    font-size: 0.87rem;
+    padding: 12px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
-  .hg-log::-webkit-scrollbar { width:5px; }
+  .hg-log::-webkit-scrollbar { width:4px; }
   .hg-log::-webkit-scrollbar-thumb { background:#444; border-radius:4px; }
-  .hg-log-empty { color:#555; font-style:italic; text-align:center; padding-top:28px; }
-  .hg-log-entry { margin-bottom:8px; line-height:1.5; }
-  .hg-you  { color:#4ade80; font-weight:700; }
-  .hg-cpu  { color:#fb923c; font-weight:700; }
-  .hg-ans  { font-weight:700; color:#c9a84c; }
-  .hg-guess-txt { color:#a78bfa; font-style:italic; }
+  .hg-log-empty { color:#555; font-style:italic; text-align:center; margin:auto; font-size:0.9rem; }
+
+  /* Chat bubbles */
+  .hg-bubble-wrap {
+    display: flex;
+    flex-direction: column;
+    max-width: 78%;
+    gap: 3px;
+  }
+  .hg-bubble-wrap.you { align-self: flex-end; align-items: flex-end; }
+  .hg-bubble-wrap.cpu { align-self: flex-start; align-items: flex-start; }
+  .hg-bubble-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.5px; color: #666; padding: 0 6px; }
+  .hg-bubble {
+    padding: 9px 14px;
+    border-radius: 18px;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    max-width: 100%;
+    word-break: break-word;
+  }
+  .hg-bubble.you-q  { background: rgba(74,222,128,0.12); border: 1px solid rgba(74,222,128,0.25); border-bottom-right-radius: 5px; color: #e8e8e8; }
+  .hg-bubble.cpu-q  { background: rgba(251,146,60,0.10); border: 1px solid rgba(251,146,60,0.22); border-bottom-left-radius: 5px; color: #e8e8e8; }
+  .hg-bubble.you-g  { background: rgba(167,139,250,0.12); border: 1px solid rgba(167,139,250,0.25); border-bottom-right-radius: 5px; color: #e8e8e8; }
+  .hg-bubble.cpu-g  { background: rgba(167,139,250,0.10); border: 1px solid rgba(167,139,250,0.22); border-bottom-left-radius: 5px; color: #e8e8e8; }
+  .hg-bubble .hg-ans-inline { font-weight:700; color:#c9a84c; margin-top:4px; display:block; font-size:0.82rem; }
+  .hg-bubble .hg-result { font-size:0.8rem; margin-top:2px; }
 
   /* ── Section label ── */
   .hg-sec {
@@ -197,14 +216,23 @@ permalink: /haram-guesser/
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: #777;
-    margin-bottom: 7px;
+    color: #666;
+    text-align: center;
+    margin-bottom: 6px;
   }
 
-  /* ── Input area ── */
-  .hg-input-row { display:flex; gap:8px; margin-bottom:10px; }
+  /* ── Input area — centered, compact ── */
+  .hg-input-area-inner {
+    max-width: 520px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .hg-input-row { display:flex; gap:8px; }
   .hg-input-row input {
-    flex:1; padding:11px 14px; border-radius:9px;
+    flex:1; padding:11px 18px; border-radius:24px;
     border:1px solid rgba(255,255,255,.15);
     background:rgba(255,255,255,.07); color:#fff;
     font-size:0.9rem; outline:none; transition:border .2s;
@@ -224,14 +252,21 @@ permalink: /haram-guesser/
 
   .hg-guess-row { display:flex; gap:8px; }
   .hg-guess-row select {
-    flex:1; padding:11px 14px; border-radius:9px;
+    flex:1; padding:11px 18px; border-radius:24px;
     border:1px solid rgba(255,255,255,.15);
     background:rgba(255,255,255,.07); color:#fff;
     font-size:0.9rem; outline:none;
   }
   .hg-guess-row select option { background:#1a1a2e; color:#fff; }
 
-  .hg-hint { font-size:0.75rem; color:#555; text-align:center; margin-top:8px; }
+  .hg-hint { font-size:0.75rem; color:#555; text-align:center; }
+
+  /* ── CPU overlay — centered ── */
+  .hg-cpu-overlay {
+    max-width: 520px;
+    margin: 0 auto;
+    width: 100%;
+  }
 
   /* ── CPU overlay ── */
   .hg-cpu-overlay {
@@ -324,21 +359,26 @@ permalink: /haram-guesser/
     flex: 1.1;
     display: flex;
     flex-direction: column;
+    align-items: center;      /* center children horizontally */
     gap: 12px;
     min-height: 0;
     border-right: 1px solid rgba(255,255,255,0.08);
     padding-right: 28px;
+    padding-top: 8px;
   }
-  /* Log takes ~55% of left column height, never more */
+  /* Log fills width but content scrolls */
   .hg-game-left .hg-log {
-    flex: 1;
-    min-height: 60px;
-    max-height: 55%;
+    width: 100%;
+    max-width: 580px;
   }
-  /* Input area never shrinks */
-  #hg-player-area { flex-shrink: 0; }
+  /* Section label centered */
+  .hg-game-left .hg-sec { width: 100%; max-width: 580px; }
+  /* CPU overlay centered */
+  .hg-game-left .hg-cpu-overlay { width: 100%; }
+  /* Input area never shrinks, full width of column */
+  #hg-player-area { flex-shrink: 0; width: 100%; }
   #hg-cpu-thinking { flex-shrink: 0; }
-  #hg-cpu-overlay { flex-shrink: 0; }
+  #hg-cpu-overlay  { flex-shrink: 0; }
 
   /* RIGHT column — word details */
   .hg-game-right {
@@ -444,7 +484,7 @@ permalink: /haram-guesser/
     <!-- ══ MENU ══ -->
     <div id="hg-menu" class="hg-screen active">
       <div class="hg-card">
-        <div class="hg-title">🕌 Haram or Not?</div>
+        <div class="hg-title">🕌 Guess the Haram</div>
         <div class="hg-sub">Ask yes/no questions to figure out the other player's haram word</div>
         <button class="hg-menu-btn hg-primary" onclick="hgStart()">▶ &nbsp; Player vs Computer</button>
         <button class="hg-menu-btn hg-disabled" disabled>🔒 &nbsp; Player vs Player &nbsp;(Coming Soon)</button>
@@ -467,7 +507,7 @@ permalink: /haram-guesser/
 
         <!-- Top bar -->
         <div class="hg-header">
-          <div class="hg-title" style="font-size:1.3rem;margin-bottom:0;">🕌 Haram or Not?</div>
+          <div class="hg-title" style="font-size:1.3rem;margin-bottom:0;">🕌 Guess the Haram</div>
           <div style="display:flex;gap:8px;align-items:center;">
             <span id="hg-turn-badge" class="hg-badge you">Your Turn</span>
             <span id="hg-round" class="hg-round">Round 1</span>
@@ -496,18 +536,20 @@ permalink: /haram-guesser/
             </div>
 
             <div id="hg-player-area">
-              <div class="hg-sec">Ask a yes/no question</div>
-              <div class="hg-input-row">
-                <input id="hg-q-input" type="text" placeholder="e.g. Is it something you eat?"
-                  maxlength="120" onkeydown="if(event.key==='Enter')hgSubmitQ()">
-                <button class="hg-btn hg-gold" onclick="hgSubmitQ()">Ask</button>
+              <div class="hg-input-area-inner">
+                <div class="hg-sec">Ask a yes/no question</div>
+                <div class="hg-input-row">
+                  <input id="hg-q-input" type="text" placeholder="e.g. Is it something you eat?"
+                    maxlength="120" onkeydown="if(event.key==='Enter')hgSubmitQ()">
+                  <button class="hg-btn hg-gold" onclick="hgSubmitQ()">Ask</button>
+                </div>
+                <div class="hg-sec" style="margin-top:6px;">Or guess the word outright</div>
+                <div class="hg-guess-row">
+                  <select id="hg-guess-sel"></select>
+                  <button class="hg-btn hg-red" onclick="hgSubmitGuess()">Guess!</button>
+                </div>
+                <div class="hg-hint">Correct guess wins · Wrong guess costs your turn</div>
               </div>
-              <div class="hg-sec" style="margin-top:12px;">Or guess the word outright</div>
-              <div class="hg-guess-row">
-                <select id="hg-guess-sel"></select>
-                <button class="hg-btn hg-red" onclick="hgSubmitGuess()">Guess!</button>
-              </div>
-              <div class="hg-hint">Correct guess wins · Wrong guess costs your turn</div>
             </div>
 
             <div id="hg-cpu-thinking" style="display:none;text-align:center;padding:14px;color:#fb923c;">⏳ Computer is thinking…</div>
@@ -932,13 +974,34 @@ function hgBuildWordPanel(word) {
 // ═══════════════════════════════════════
 function hgRenderLog() {
   const box = document.getElementById('hg-log');
-  if (!hgLog.length) { box.innerHTML='<div class="hg-log-empty">No questions yet — you go first!</div>'; return; }
+  if (!hgLog.length) {
+    box.innerHTML='<div class="hg-log-empty">No questions yet — you go first!</div>';
+    return;
+  }
   box.innerHTML = hgLog.map(e=>{
-    const wc = e.who==='you'?'hg-you':'hg-cpu';
-    const wl = e.who==='you'?'YOU':'CPU';
-    if (e.type==='question')
-      return `<div class="hg-log-entry"><span class="${wc}">${wl}</span> asked: "<span style="color:#ddd">${e.q}</span>"<br>&nbsp;&nbsp;↳ <span class="hg-ans">${e.ans}</span></div>`;
-    return `<div class="hg-log-entry"><span class="${wc}">${wl}</span> guessed: <span class="hg-guess-txt">${HG_WORDS[e.w]?.display||e.w}</span> ${e.ok?'✅':'❌'}</div>`;
+    const isYou = e.who === 'you';
+    const side  = isYou ? 'you' : 'cpu';
+    const label = isYou ? 'You' : 'Computer';
+
+    if (e.type === 'question') {
+      const bubClass = isYou ? 'you-q' : 'cpu-q';
+      return `<div class="hg-bubble-wrap ${side}">
+        <span class="hg-bubble-label">${label}</span>
+        <div class="hg-bubble ${bubClass}">
+          ${e.q}
+          <span class="hg-ans-inline">↳ ${e.ans}</span>
+        </div>
+      </div>`;
+    } else {
+      const bubClass = isYou ? 'you-g' : 'cpu-g';
+      const display  = HG_WORDS[e.w]?.display || e.w;
+      return `<div class="hg-bubble-wrap ${side}">
+        <span class="hg-bubble-label">${label} guessed</span>
+        <div class="hg-bubble ${bubClass}">
+          ${display} ${e.ok ? '✅ Correct!' : '❌ Wrong'}
+        </div>
+      </div>`;
+    }
   }).join('');
   box.scrollTop = box.scrollHeight;
 }
