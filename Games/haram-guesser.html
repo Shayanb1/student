@@ -5,22 +5,26 @@ permalink: /haram-guesser/
 ---
 
 <style>
-  /* Force game to cover the full viewport, escaping Jekyll's sidebar layout */
+  /* Appended to body via JS — escapes any Jekyll stacking context */
   #haram-game-overlay {
     position: fixed;
-    inset: 0;
-    z-index: 9999;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100vw; height: 100vh;
+    z-index: 99999;
     background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
     overflow-y: auto;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #e8e8e8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   #haram-game-overlay * { box-sizing: border-box; margin: 0; padding: 0; }
 
   /* ── Layout ── */
   .hg-wrap {
-    max-width: 800px;
-    margin: 0 auto;
+    width: 100%;
+    max-width: 780px;
     padding: 28px 16px 40px;
   }
 
@@ -628,4 +632,12 @@ function hgEndGame(winner) {
     <div class="hg-reveal-row"><span class="hg-rlabel">Questions asked</span><span class="hg-rval">${qCount}</span></div>`;
   hgShow('hg-end');
 }
+
+// Move overlay to body to escape any Jekyll stacking context/transform
+document.addEventListener('DOMContentLoaded', function() {
+  var overlay = document.getElementById('haram-game-overlay');
+  if (overlay && overlay.parentNode !== document.body) {
+    document.body.appendChild(overlay);
+  }
+});
 </script>
