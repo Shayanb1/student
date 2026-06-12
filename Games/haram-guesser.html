@@ -83,34 +83,45 @@ permalink: /haram-guesser/
   .hg-disabled { background:rgba(255,255,255,.06); color:#555; cursor:not-allowed; border:1px solid #333; }
 
   /* ── Word picker ── */
+  /* Each category is a flex row that shares the vertical space equally */
+  .hg-cat-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 0;
+  }
   .hg-cat-label {
     font-size: 0.72rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1.2px;
     color: #c9a84c;
-    margin: 14px 0 8px;
+    margin-bottom: 6px;
   }
   .hg-word-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 8px;
-    margin-bottom: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+    gap: 7px;
   }
   .hg-chip {
-    padding: 9px 8px;
+    padding: 10px 8px;
     border-radius: 9px;
     border: 2px solid rgba(255,255,255,.1);
     background: rgba(255,255,255,.05);
     cursor: pointer;
     text-align: center;
-    font-size: 0.82rem;
+    font-size: 0.85rem;
     line-height: 1.4;
     transition: all 0.18s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
   .hg-chip:hover { border-color:#c9a84c; background:rgba(201,168,76,.1); }
   .hg-chip.selected { border-color:#c9a84c; background:rgba(201,168,76,.18); color:#c9a84c; font-weight:700; }
-  .hg-chip-arabic { display:block; font-size:0.78rem; color:#aaa; }
+  .hg-chip-arabic { display:block; font-size:0.78rem; color:#aaa; margin-top:2px; }
   .hg-chip.selected .hg-chip-arabic { color:#c9a84c; }
 
   /* ── Game screen ── */
@@ -239,16 +250,18 @@ permalink: /haram-guesser/
   .hg-back button { background:none; border:none; color:#777; cursor:pointer; font-size:0.88rem; text-decoration:underline; }
   .hg-back button:hover { color:#ccc; }
 
-  /* Word picker: scrollable word area, confirm pinned to bottom */
+  /* Word picker: sections fill full height, confirm pinned at bottom */
   #hg-pick .hg-card {
-    overflow: hidden; /* card itself doesn't scroll */
+    overflow: hidden;
   }
   #hg-word-grid-wrap {
     flex: 1;
-    overflow-y: auto;
     min-height: 0;
-    padding-right: 4px;
-    margin-bottom: 14px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    margin-bottom: 12px;
+    padding-right: 2px;
   }
   #hg-word-grid-wrap::-webkit-scrollbar { width: 5px; }
   #hg-word-grid-wrap::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
@@ -288,9 +301,7 @@ permalink: /haram-guesser/
       <div class="hg-card">
         <div class="hg-title" style="font-size:1.5rem;">Choose Your Secret Word</div>
         <div class="hg-sub">The computer won't see your choice</div>
-        <div id="hg-word-grid-wrap">
-          <div id="hg-word-grid"></div>
-        </div>
+        <div id="hg-word-grid-wrap"></div>
         <button class="hg-btn hg-gold" style="width:100%;padding:14px;font-size:0.95rem;flex-shrink:0;" onclick="hgConfirmWord()">Confirm Word →</button>
       </div>
     </div>
@@ -524,12 +535,17 @@ function hgGoMenu() { hgShow('hg-menu'); }
 // ═══════════════════════════════════════
 function hgStart() {
   hgPlayerWord=null;
-  const grid = document.getElementById('hg-word-grid');
-  grid.innerHTML='';
+  const wrap = document.getElementById('hg-word-grid-wrap');
+  // Clear everything except the wrap itself (keep the wrap, rebuild insides)
+  wrap.innerHTML='';
   for (const cat of ['food','financial','speech','worship','entertainment','body']) {
+    const section = document.createElement('div');
+    section.className = 'hg-cat-section';
+
     const lbl = document.createElement('div');
     lbl.className='hg-cat-label'; lbl.textContent=HG_CATS[cat];
-    grid.appendChild(lbl);
+    section.appendChild(lbl);
+
     const g = document.createElement('div');
     g.className='hg-word-grid';
     HG_WORD_LIST.filter(w=>HG_WORDS[w].cat===cat).forEach(w=>{
@@ -544,7 +560,8 @@ function hgStart() {
       };
       g.appendChild(chip);
     });
-    grid.appendChild(g);
+    section.appendChild(g);
+    wrap.appendChild(section);
   }
   hgShow('hg-pick');
 }
