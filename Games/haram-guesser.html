@@ -496,23 +496,18 @@ permalink: /haram-guesser/
   }
   .hg-wp-hint strong { color: #c9a84c; }
   .hg-wp-bullets {
-    list-style: none;
     display: flex;
     flex-direction: column;
     gap: 5px;
   }
-  .hg-wp-bullets li {
+  .hg-wp-bullet {
     font-size: 0.84rem;
     color: #ccc;
     line-height: 1.45;
-    display: flex;
-    gap: 8px;
   }
-  .hg-wp-bullets li::before {
-    content: '•';
+  .hg-wp-bullet-dot {
     color: #c9a84c;
     font-weight: 700;
-    flex-shrink: 0;
   }
   .hg-wp-example {
     background: rgba(201,168,76,0.06);
@@ -1158,9 +1153,9 @@ function hgBuildWordPanel(word) {
     ${info.bullets.length ? `
     <div>
       <div class="hg-wp-divider">What it is</div>
-      <ul class="hg-wp-bullets">
-        ${info.bullets.map(b=>`<li>${b}</li>`).join('')}
-      </ul>
+      <div class="hg-wp-bullets">
+        ${info.bullets.map(b=>`<div class="hg-wp-bullet"><span class="hg-wp-bullet-dot">• </span>${b}</div>`).join('')}
+      </div>
     </div>` : ''}
 
     ${info.example ? `
