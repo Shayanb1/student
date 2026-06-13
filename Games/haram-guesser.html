@@ -541,6 +541,79 @@ permalink: /haram-guesser/
     margin-bottom: 2px;
   }
 
+  /* ── Word bank modal ── */
+  #hg-wordbank-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 200000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .hg-wb-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(6px);
+  }
+  .hg-wb-panel {
+    position: relative;
+    z-index: 1;
+    background: rgba(12,2,28,0.97);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 18px;
+    padding: 28px 28px 24px;
+    width: 90%;
+    max-width: 640px;
+    max-height: 78vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .hg-wb-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hg-wb-header span { font-size:1rem; font-weight:700; color:#ccc; }
+  .hg-wb-close {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #aaa;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+  }
+  .hg-wb-close:hover { background: rgba(255,255,255,0.16); color:#fff; }
+  .hg-wb-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 8px;
+  }
+  .hg-wb-word {
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    color: #ddd;
+    font-size: 0.85rem;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+  }
+  .hg-wb-word:hover {
+    background: rgba(201,168,76,0.15);
+    border-color: rgba(201,168,76,0.45);
+    color: #e8c96d;
+  }
+
   @media(max-width:520px){
     .hg-card { padding:16px 12px; }
     .hg-title { font-size:1.7rem; }
@@ -625,10 +698,7 @@ permalink: /haram-guesser/
                   <button class="hg-btn hg-gold" onclick="hgSubmitQ()">Ask</button>
                 </div>
                 <div class="hg-sec" style="margin-top:6px;">Or guess the word outright</div>
-                <div class="hg-guess-row">
-                  <select id="hg-guess-sel"></select>
-                  <button class="hg-btn hg-red" onclick="hgSubmitGuess()">Guess!</button>
-                </div>
+                <button class="hg-btn hg-red" style="width:100%;padding:12px;" onclick="hgOpenWordBank()">🎯 Guess the Word</button>
                 <div class="hg-hint">Correct guess wins · Wrong guess costs your turn</div>
               </div>
             </div>
@@ -659,6 +729,18 @@ permalink: /haram-guesser/
         </div>
       </div>
     </div>
+
+  <!-- ══ WORD BANK MODAL ══ -->
+  <div id="hg-wordbank-modal" style="display:none;">
+    <div class="hg-wb-backdrop" onclick="hgCloseWordBank()"></div>
+    <div class="hg-wb-panel">
+      <div class="hg-wb-header">
+        <span>Pick a word to guess</span>
+        <button class="hg-wb-close" onclick="hgCloseWordBank()">✕</button>
+      </div>
+      <div class="hg-wb-grid" id="hg-wb-grid"></div>
+    </div>
+  </div>
 
   </div>
 </div>
@@ -942,6 +1024,7 @@ let hgCPU = {
   apply(filterFn, ans) {
     if (ans==='Yes') this.remaining = this.remaining.filter(filterFn);
     if (ans==='No')  this.remaining = this.remaining.filter(w=>!filterFn(w));
+    if (this.remaining.length === 0) this.remaining = [...HG_WORD_LIST];
   }
 };
 
@@ -1245,8 +1328,30 @@ function hgSubmitQ() {
   hgRenderLog(); hgEndPlayerTurn();
 }
 
+function hgOpenWordBank() {
+  const grid = document.getElementById('hg-wb-grid');
+  grid.innerHTML = HG_WORD_LIST.map(w =>
+    `<button class="hg-wb-word" onclick="hgPickWordGuess('${w}')">${HG_WORDS[w].display}</button>`
+  ).join('');
+  document.getElementById('hg-wordbank-modal').style.display = 'flex';
+}
+
+function hgCloseWordBank() {
+  document.getElementById('hg-wordbank-modal').style.display = 'none';
+}
+
+function hgPickWordGuess(w) {
+  hgCloseWordBank();
+  const ok = w === hgCPU.secret;
+  hgLog.push({who:'you', type:'guess', w, ok});
+  hgRenderLog();
+  if (ok) { hgEndGame('player'); return; }
+  hgEndPlayerTurn();
+}
+
 function hgSubmitGuess() {
-  const w=document.getElementById('hg-guess-sel').value;
+  const w=document.getElementById('hg-guess-sel') && document.getElementById('hg-guess-sel').value;
+  if (!w) return;
   const ok=w===hgCPU.secret;
   hgLog.push({who:'you',type:'guess',w,ok});
   hgRenderLog();
