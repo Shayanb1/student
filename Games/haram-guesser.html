@@ -365,6 +365,18 @@ permalink: /haram-guesser/
   #hg-menu .hg-card {
     justify-content: center;
   }
+  /* End screen: center a bubble card */
+  #hg-end .hg-card {
+    justify-content: center;
+    align-items: center;
+  }
+  .hg-end-inner {
+    width: 100%;
+    max-width: 520px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
 
   /* ── Game screen ── */
   #hg-game .hg-card {
@@ -637,12 +649,14 @@ permalink: /haram-guesser/
     <!-- ══ END ══ -->
     <div id="hg-end" class="hg-screen">
       <div class="hg-card">
-        <div id="hg-end-icon"  class="hg-end-icon"></div>
-        <div id="hg-end-title" class="hg-end-title"></div>
-        <div id="hg-end-sub"   style="text-align:center;color:#aaa;margin-bottom:4px;"></div>
-        <div id="hg-reveal"    class="hg-reveal"></div>
-        <button class="hg-menu-btn hg-primary" onclick="hgStart()">Play Again</button>
-        <div class="hg-back"><button onclick="hgGoMenu()">← Main Menu</button></div>
+        <div class="hg-end-inner">
+          <div id="hg-end-icon"  class="hg-end-icon"></div>
+          <div id="hg-end-title" class="hg-end-title"></div>
+          <div id="hg-end-sub"   style="text-align:center;color:#aaa;"></div>
+          <div id="hg-reveal"    class="hg-reveal"></div>
+          <button class="hg-menu-btn hg-primary" onclick="hgStart()">Play Again</button>
+          <div class="hg-back"><button onclick="hgGoMenu()">← Main Menu</button></div>
+        </div>
       </div>
     </div>
 
