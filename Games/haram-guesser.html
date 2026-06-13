@@ -505,15 +505,14 @@ permalink: /haram-guesser/
     font-size: 0.84rem;
     color: #ccc;
     line-height: 1.45;
-    padding-left: 16px;
-    position: relative;
+    display: flex;
+    gap: 8px;
   }
   .hg-wp-bullets li::before {
     content: '•';
-    position: absolute;
-    left: 0;
     color: #c9a84c;
     font-weight: 700;
+    flex-shrink: 0;
   }
   .hg-wp-example {
     background: rgba(201,168,76,0.06);
@@ -1265,6 +1264,7 @@ function hgDoCPU() {
       document.getElementById('hg-cpu-overlay').classList.add('active');
     } else {
       const ok=action.w===hgPlayerWord;
+      hgCPU.remaining = hgCPU.remaining.filter(w=>w!==action.w);
       hgLog.push({who:'cpu',type:'guess',w:action.w,ok});
       hgRenderLog();
       if (ok) { hgEndGame('cpu'); return; }
