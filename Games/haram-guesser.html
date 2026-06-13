@@ -1082,8 +1082,6 @@ function hgConfirmWord() {
   if (!hgPlayerWord) { alert('Please select a word first!'); return; }
   hgCPU.init();
   hgTurn='player'; hgRound=1; hgLog=[]; hgPending=null;
-  const sel = document.getElementById('hg-guess-sel');
-  sel.innerHTML = HG_WORD_LIST.map(w=>`<option value="${w}">${HG_WORDS[w].display}</option>`).join('');
   hgRenderLog(); hgUpdateHeader();
   document.getElementById('hg-player-area').style.display='block';
   document.getElementById('hg-cpu-overlay').classList.remove('active');
